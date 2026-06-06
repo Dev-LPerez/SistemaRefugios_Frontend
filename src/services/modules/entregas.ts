@@ -44,7 +44,7 @@ export async function apiUpdateEntregaEstado(id: number, estado: string): Promis
   return put<void>('entregas', id, { estado })
 }
 
-export async function apiDeleteEntrega(id: number): Promise<ApiResponse<void>> {
-  return del<void>('entregas', id)
+export async function apiDeleteEntrega(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('entregas', id, motivo)
 }
 

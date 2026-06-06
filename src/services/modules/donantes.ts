@@ -34,6 +34,6 @@ export async function apiUpdateDonante(id: number, data: Partial<Donante>): Prom
   return put<Donante>('donantes', id, data)
 }
 
-export async function apiDeleteDonante(id: number): Promise<ApiResponse<void>> {
-  return del<void>('donantes', id)
+export async function apiDeleteDonante(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('donantes', id, motivo)
 }

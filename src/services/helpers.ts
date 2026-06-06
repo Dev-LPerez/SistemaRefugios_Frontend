@@ -48,9 +48,9 @@ export async function put<T>(route: string, id: number, data: unknown): Promise<
   }
 }
 
-export async function del<T>(route: string, id: number): Promise<ApiResponse<T>> {
+export async function del<T>(route: string, id: number, motivo?: string): Promise<ApiResponse<T>> {
   try {
-    const res = await apiClient.delete('', { params: { route, id } })
+    const res = await apiClient.delete('', { params: { route, id, motivo } })
     return normalize<T>(res)
   } catch (err: any) {
     return { success: false, message: err.response?.data?.message ?? err.response?.data?.error ?? 'Error de conexión' }

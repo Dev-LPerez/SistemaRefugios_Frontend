@@ -561,8 +561,13 @@ async function guardarDonante() {
 }
 
 async function eliminarDonante(d: Donante) {
-  if (!confirm(`¿Eliminar al donante "${d.nombre}"?`)) return
-  const res = await apiDeleteDonante(d.id)
+  const motivo = prompt(`¿Está seguro de eliminar al donante "${d.nombre}"? Ingrese el motivo de la eliminación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la eliminación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteDonante(d.id, motivo.trim())
   if (res.success) donantes.value = donantes.value.filter(x => x.id !== d.id)
   else error.value = res.message ?? 'Error'
 }

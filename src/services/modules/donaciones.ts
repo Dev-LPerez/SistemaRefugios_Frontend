@@ -36,8 +36,8 @@ export async function apiUpdateDonacion(id: number, data: Partial<Donacion>): Pr
   return put<Donacion>('donaciones', id, data)
 }
 
-export async function apiDeleteDonacion(id: number): Promise<ApiResponse<void>> {
-  return del<void>('donaciones', id)
+export async function apiDeleteDonacion(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('donaciones', id, motivo)
 }
 
 export async function apiAgregarDetalleDonacion(detalle: DetalleDonacion): Promise<ApiResponse<void>> {

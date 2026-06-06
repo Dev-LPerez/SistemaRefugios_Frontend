@@ -54,6 +54,7 @@
                 <th class="px-4 py-3.5 hidden md:table-cell">Módulo</th>
                 <th class="px-4 py-3.5 hidden lg:table-cell">Detalle</th>
                 <th class="px-4 py-3.5 hidden sm:table-cell">Fecha</th>
+                <th class="px-4 py-3.5 text-right">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -71,12 +72,86 @@
                 <td class="px-4 py-3 text-slate-500 hidden md:table-cell border-b border-slate-100/40"><span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-semibold border border-emerald-100">{{ log.modulo }}</span></td>
                 <td class="px-4 py-3 text-slate-500 text-xs hidden lg:table-cell max-w-48 truncate border-b border-slate-100/40">{{ log.detalle }}</td>
                 <td class="px-4 py-3 text-slate-400 text-xs hidden sm:table-cell whitespace-nowrap border-b border-slate-100/40">{{ formatFecha(log.fecha) }}</td>
+                <td class="px-4 py-3 text-right border-b border-slate-100/40">
+                  <button @click="verDetalle(log)" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all shadow-sm cursor-pointer inline-flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                    Ver detalles movimiento
+                  </button>
+                </td>
               </tr>
-              <tr v-if="filtrados.length === 0"><td colspan="6" class="px-4 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">No hay registros de auditoría</td></tr>
+              <tr v-if="filtrados.length === 0"><td colspan="7" class="px-4 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">No hay registros de auditoría</td></tr>
             </tbody>
           </table>
         </div>
         <PaginationBar v-if="filtrados.length > 0" v-model:page="page" v-model:perPage="perPage" :total="filtrados.length" />
+      </div>
+    </div>
+
+    <!-- Modal Detalle Movimiento -->
+    <div v-if="modalDetalleVisible && logSeleccionado" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-2xl p-6 relative overflow-hidden animate-[fadeIn_0.2s_ease-out]">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider font-display flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse"></span>
+            Detalles del Movimiento
+          </h3>
+          <button @click="cerrarModalDetalle" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4 text-xs">
+          <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/50">
+            <div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Usuario / Operador</p>
+              <p class="font-bold text-slate-900 mt-0.5">{{ logSeleccionado.usuario }}</p>
+              <span class="inline-block px-1.5 py-0.5 bg-slate-200 text-slate-650 rounded text-[9px] font-semibold uppercase tracking-wider mt-1">{{ logSeleccionado.rol }}</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fecha de Registro</p>
+              <p class="font-bold text-slate-900 mt-0.5">{{ formatFecha(logSeleccionado.fecha) }}</p>
+              <p class="text-[9px] text-slate-400 mt-1 font-mono">IP: {{ logSeleccionado.ip }}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-display">Módulo / Sección</p>
+              <span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-800 rounded border border-emerald-250 font-semibold uppercase tracking-wider mt-1">{{ logSeleccionado.modulo }}</span>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-display">Acción Realizada</p>
+              <span :class="['inline-block px-2 py-0.5 rounded border font-semibold uppercase tracking-wider mt-1', accionColor(logSeleccionado.accion)]">{{ logSeleccionado.accion }}</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1 font-display">Descripción de la Operación</p>
+            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5">
+              <p class="text-slate-800 font-semibold leading-relaxed">{{ parsedDetails?.prefix || 'Sin descripción adicional' }}</p>
+              
+              <!-- Parsed JSON grid payload -->
+              <div v-if="parsedDetails && parsedDetails.data" class="mt-3 border-t border-slate-200/60 pt-3">
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2 font-mono">Carga de Datos Enviada:</p>
+                <div class="max-h-52 overflow-y-auto font-mono text-[10px] text-slate-700 bg-white border border-slate-200/60 rounded-lg p-2.5 space-y-1.5 shadow-inner">
+                  <div v-for="(val, key) in parsedDetails.data" :key="key" class="py-1 border-b border-slate-100 last:border-0 flex justify-between gap-4">
+                    <span class="font-bold text-slate-500 uppercase text-[9px] tracking-tight">{{ key }}:</span>
+                    <span class="text-right break-all text-slate-800 font-semibold">{{ val === true ? 'Sí' : val === false ? 'No' : val }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-5">
+          <button @click="cerrarModalDetalle" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-650 rounded-xl font-bold uppercase tracking-wider transition-colors cursor-pointer text-xs">
+            Cerrar
+          </button>
+        </div>
       </div>
     </div>
   </AppLayout>
@@ -94,6 +169,38 @@ const busqueda = ref(''); const filtroModulo = ref('')
 const page = ref(1); const perPage = ref(20)
 const today = new Date().toISOString().split('T')[0]
 
+const logSeleccionado = ref<AuditoriaLog | null>(null)
+const modalDetalleVisible = ref(false)
+
+function verDetalle(log: AuditoriaLog) {
+  logSeleccionado.value = log
+  modalDetalleVisible.value = true
+}
+
+function cerrarModalDetalle() {
+  logSeleccionado.value = null
+  modalDetalleVisible.value = false
+}
+
+// Procesa el campo de detalles para separar texto introductorio y la carga de datos JSON si existe
+const parsedDetails = computed(() => {
+  if (!logSeleccionado.value || !logSeleccionado.value.detalle) return null
+  
+  const raw = logSeleccionado.value.detalle
+  const jsonIndex = raw.indexOf('{')
+  if (jsonIndex !== -1) {
+    try {
+      const prefix = raw.substring(0, jsonIndex).trim()
+      const jsonStr = raw.substring(jsonIndex)
+      const data = JSON.parse(jsonStr)
+      return { prefix, data }
+    } catch {
+      // Ignorar fallo y tratar como texto plano
+    }
+  }
+  return { prefix: raw, data: null }
+})
+
 const modulosUnicos = computed(() => new Set(logs.value.map(l => l.modulo)).size)
 const usuariosUnicos = computed(() => new Set(logs.value.map(l => l.usuario)).size)
 const accionesHoy = computed(() => logs.value.filter(l => l.fecha?.startsWith(today)).length)
@@ -108,10 +215,10 @@ const paginados = computed(() => filtrados.value.slice((page.value - 1) * perPag
 
 function accionColor(accion: string) {
   const a = accion?.toUpperCase() ?? ''
-  if (a.includes('CREATE') || a.includes('POST') || a.includes('INSERT')) return 'bg-green-100 text-green-700'
-  if (a.includes('UPDATE') || a.includes('PUT') || a.includes('EDIT')) return 'bg-blue-100 text-blue-700'
-  if (a.includes('DELETE') || a.includes('REMOVE')) return 'bg-red-100 text-red-700'
-  return 'bg-slate-100 text-slate-600'
+  if (a.includes('CREATE') || a.includes('POST') || a.includes('INSERT')) return 'bg-green-100 text-green-700 border-green-200'
+  if (a.includes('UPDATE') || a.includes('PUT') || a.includes('EDIT')) return 'bg-blue-100 text-blue-700 border-blue-200'
+  if (a.includes('DELETE') || a.includes('REMOVE')) return 'bg-red-100 text-red-700 border-red-200'
+  return 'bg-slate-100 text-slate-600 border-slate-200'
 }
 
 function formatFecha(fecha: string) {

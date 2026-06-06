@@ -257,8 +257,13 @@ async function toggleEstado(r: Refugio) {
 }
 
 async function eliminar(r: Refugio) {
-  if (!confirm(`¿Eliminar el refugio "${r.nombre}"?`)) return
-  const res = await apiDeleteRefugio(r.id)
+  const motivo = prompt(`¿Está seguro de eliminar el refugio "${r.nombre}"? Ingrese el motivo de la eliminación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la eliminación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteRefugio(r.id, motivo.trim())
   if (res.success) refugios.value = refugios.value.filter(x => x.id !== r.id)
   else error.value = res.message ?? 'Error al eliminar'
 }

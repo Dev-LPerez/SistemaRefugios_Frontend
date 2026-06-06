@@ -34,6 +34,6 @@ export async function apiUpdateRecurso(id: number, data: Partial<Recurso>): Prom
   return put<Recurso>('recursos', id, data)
 }
 
-export async function apiDeleteRecurso(id: number): Promise<ApiResponse<void>> {
-  return del<void>('recursos', id)
+export async function apiDeleteRecurso(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('recursos', id, motivo)
 }

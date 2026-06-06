@@ -40,6 +40,6 @@ export async function apiUpdateFamilia(id: number, data: Partial<Familia>): Prom
   return put<Familia>('familias', id, data)
 }
 
-export async function apiDeleteFamilia(id: number): Promise<ApiResponse<void>> {
-  return del<void>('familias', id)
+export async function apiDeleteFamilia(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('familias', id, motivo)
 }

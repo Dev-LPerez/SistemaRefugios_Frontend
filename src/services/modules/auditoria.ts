@@ -18,7 +18,8 @@ export async function apiGetAuditoria(): Promise<ApiResponse<AuditoriaLog[]>> {
       rol: l.rol ?? '',
       accion: l.accion ?? l.method ?? '',
       modulo: l.entidad ?? l.modulo ?? '',
-      detalle: l.detalle ?? l.ip ?? '',
+      detalle: l.detalle ?? '',
+      ip: l.ip ?? '',
       fecha: l.timestamp ?? l.fecha ?? '',
     }))
   }

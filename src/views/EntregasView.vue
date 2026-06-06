@@ -486,8 +486,13 @@ async function cambiarEstado(e: Entrega, nuevoEstado: string) {
 // ─── Eliminar entrega existente ───────────────────────────────────────────────
 
 async function eliminar(e: Entrega) {
-  if (!confirm(`¿Anular esta entrega? El stock del recurso será devuelto al inventario.`)) return
-  const res = await apiDeleteEntrega(e.id)
+  const motivo = prompt(`¿Está seguro de anular esta entrega? Se devolverá el stock al inventario. Ingrese el motivo de la anulación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la anulación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteEntrega(e.id, motivo.trim())
   if (res.success) {
     entregas.value = entregas.value.filter(x => x.id !== e.id)
     // Actualizar stock

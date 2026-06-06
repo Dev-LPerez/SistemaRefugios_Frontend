@@ -481,8 +481,13 @@ async function guardar() {
 }
 
 async function eliminarFamilia(f: Familia) {
-  if (!confirm(`¿Eliminar familia de "${f.representante}"?`)) return
-  const res = await apiDeleteFamilia(f.id)
+  const motivo = prompt(`¿Está seguro de eliminar la familia de "${f.representante}"? Ingrese el motivo de la eliminación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la eliminación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteFamilia(f.id, motivo.trim())
   if (res.success) familias.value = familias.value.filter(x => x.id !== f.id)
   else error.value = res.message ?? 'Error al eliminar'
 }
@@ -548,8 +553,13 @@ async function guardarMiembro() {
 }
 
 async function eliminarMiembro(m: MiembroFamilia) {
-  if (!confirm(`¿Eliminar a "${m.nombre}"?`)) return
-  const res = await apiDeleteMiembro(m.id)
+  const motivo = prompt(`¿Está seguro de eliminar al miembro "${m.nombre}"? Ingrese el motivo de la eliminación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la eliminación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteMiembro(m.id, motivo.trim())
   if (res.success) miembros.value = miembros.value.filter(x => x.id !== m.id)
   else error.value = res.message ?? 'Error al eliminar'
 }

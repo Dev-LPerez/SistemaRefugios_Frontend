@@ -184,6 +184,7 @@ export interface AuditoriaLog {
   accion: string
   modulo: string
   detalle: string
+  ip: string
   fecha: string
 }
 

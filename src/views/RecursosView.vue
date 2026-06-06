@@ -225,8 +225,13 @@ async function guardar() {
 }
 
 async function eliminar(r: Recurso) {
-  if (!confirm(`¿Eliminar "${r.nombre}"?`)) return
-  const res = await apiDeleteRecurso(r.id)
+  const motivo = prompt(`¿Está seguro de eliminar el recurso "${r.nombre}"? Ingrese el motivo de la eliminación:`)
+  if (motivo === null) return
+  if (!motivo.trim()) {
+    alert('El motivo de la eliminación es obligatorio.')
+    return
+  }
+  const res = await apiDeleteRecurso(r.id, motivo.trim())
   if (res.success) recursos.value = recursos.value.filter(x => x.id !== r.id)
   else error.value = res.message ?? 'Error'
 }

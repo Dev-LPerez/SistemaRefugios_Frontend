@@ -90,6 +90,6 @@ export async function apiUpdateMiembro(id: number, data: Partial<MiembroFamilia>
   return put<MiembroFamilia>('familias/miembros', id, payload)
 }
 
-export async function apiDeleteMiembro(id: number): Promise<ApiResponse<void>> {
-  return del<void>('familias/miembros', id)
+export async function apiDeleteMiembro(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('familias/miembros', id, motivo)
 }

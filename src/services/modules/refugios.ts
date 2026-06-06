@@ -35,6 +35,6 @@ export async function apiUpdateRefugio(id: number, data: Partial<Refugio>): Prom
   return put<Refugio>('refugios', id, data)
 }
 
-export async function apiDeleteRefugio(id: number): Promise<ApiResponse<void>> {
-  return del<void>('refugios', id)
+export async function apiDeleteRefugio(id: number, motivo?: string): Promise<ApiResponse<void>> {
+  return del<void>('refugios', id, motivo)
 }
