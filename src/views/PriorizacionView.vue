@@ -1,82 +1,101 @@
 <template>
   <AppLayout title="Priorización">
-    <div class="p-4 sm:p-6 lg:p-8">
-      <div class="flex items-center justify-between mb-6">
+    <div class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 class="text-xl font-bold text-slate-800">Motor de Priorización</h1>
-          <p class="text-sm text-slate-500 mt-0.5">Familias ordenadas por puntaje de vulnerabilidad</p>
+          <h1 class="text-xl font-bold tracking-tight text-slate-800 uppercase font-display flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            Motor de Priorización
+          </h1>
+          <p class="text-xs text-slate-500 mt-0.5">Familias ordenadas por puntaje de vulnerabilidad</p>
         </div>
-        <button @click="recargar" :disabled="loading" class="inline-flex items-center gap-2 bg-slate-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-800 disabled:opacity-60 transition-colors">
+        <button @click="recargar" :disabled="loading" class="inline-flex items-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 shadow-sm transition-all cursor-pointer">
           <svg :class="['w-4 h-4', loading && 'animate-spin']" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           Actualizar
         </button>
       </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-        <div class="bg-white rounded-xl p-4 border border-slate-200"><p class="text-xs text-slate-500 mb-1">Familias Evaluadas</p><p class="text-2xl font-bold text-slate-800">{{ lista.length }}</p></div>
-        <div class="bg-white rounded-xl p-4 border border-slate-200"><p class="text-xs text-slate-500 mb-1">Alta Prioridad (≥80)</p><p class="text-2xl font-bold text-red-600">{{ altaPrioridad }}</p></div>
-        <div class="bg-white rounded-xl p-4 border border-slate-200 col-span-2 sm:col-span-1"><p class="text-xs text-slate-500 mb-1">Puntaje Promedio</p><p class="text-2xl font-bold text-blue-600">{{ promedio }}</p></div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-200 p-4 mb-4 flex flex-wrap gap-3 items-center">
-        <input v-model="busqueda" type="text" placeholder="Buscar familia..."
-          class="flex-1 min-w-40 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-slate-400"/>
-        <div class="flex gap-2">
-          <button @click="filtro=''" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtro==='' ? 'bg-slate-700 text-white' : 'bg-slate-100 text-slate-600']">Todos</button>
-          <button @click="filtro='alta'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtro==='alta' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600']">Alta ≥80</button>
-          <button @click="filtro='media'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtro==='media' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-600']">Media 50–79</button>
-          <button @click="filtro='baja'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtro==='baja' ? 'bg-green-600 text-white' : 'bg-slate-100 text-slate-600']">Baja &lt;50</button>
+      <!-- Stats --      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Familias Evaluadas</p>
+          <p class="text-2xl font-bold text-slate-900 mt-2">{{ lista.length }}</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider font-sans">Alta Prioridad (≥80)</p>
+          <p class="text-2xl font-bold text-rose-600 mt-2">{{ altaPrioridad }}</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md col-span-2 sm:col-span-1">
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Puntaje Promedio</p>
+          <p class="text-2xl font-bold text-emerald-600 mt-2">{{ promedio }}</p>
         </div>
       </div>
 
-      <div v-if="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">{{ error }}</div>
+      <!-- Filters -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between shadow-md">
+        <div class="flex-1 min-w-[240px]">
+          <input v-model="busqueda" type="text" placeholder="Buscar familia..."
+            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner"/>
+        </div>
+        <div class="flex gap-1.5 text-[10px] uppercase tracking-wider flex-wrap font-semibold">
+          <button @click="filtro=''" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtro==='' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Todos</button>
+          <button @click="filtro='alta'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtro==='alta' ? 'bg-rose-50 border-rose-250 text-rose-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Alta ≥80</button>
+          <button @click="filtro='media'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtro==='media' ? 'bg-amber-50 border-amber-250 text-amber-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Media 50–79</button>
+          <button @click="filtro='baja'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtro==='baja' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Baja &lt;50</button>
+        </div>
+      </div>
 
-      <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div v-if="loading" class="flex justify-center py-12"><svg class="animate-spin h-8 w-8 text-slate-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
+      <div v-if="error" class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 shadow-md">{{ error }}</div>
+
+      <!-- Table -->
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
+        <div v-if="loading" class="flex justify-center py-12"><svg class="animate-spin h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
         <div v-else class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase">#</th>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Representante</th>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden sm:table-cell">Ubicación</th>
-                <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Miembros</th>
-                <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Puntaje</th>
-                <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden md:table-cell">Prioridad</th>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden lg:table-cell">Raciones (3 días)</th>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                <th class="px-5 py-3.5 text-center">Posición</th>
+                <th class="px-5 py-3.5">Representante</th>
+                <th class="px-5 py-3.5 hidden sm:table-cell">Ubicación</th>
+                <th class="px-5 py-3.5 text-center">Miembros</th>
+                <th class="px-5 py-3.5 text-center">Puntaje</th>
+                <th class="px-5 py-3.5 text-center hidden md:table-cell">Prioridad</th>
+                <th class="px-5 py-3.5 hidden lg:table-cell">Raciones Necesarias (3 días)</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="(item, index) in paginados" :key="item.id_familia" class="hover:bg-slate-50 transition-colors">
-                <td class="px-4 py-3 text-center">
-                  <span :class="['inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold', index + (page-1)*perPage < 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600']">
+            <tbody class="text-xs text-slate-700">
+              <tr v-for="(item, index) in paginados" :key="item.id_familia" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                <td class="px-5 py-4 text-center border-b border-slate-100/40">
+                  <span :class="['inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border', index + (page-1)*perPage < 3 ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-slate-50 text-slate-500 border-slate-200']">
                     {{ index + (page-1)*perPage + 1 }}
                   </span>
                 </td>
-                <td class="px-4 py-3 font-medium text-slate-800">{{ item.representante }}</td>
-                <td class="px-4 py-3 text-slate-500 text-xs hidden sm:table-cell max-w-40 truncate">{{ item.ubicacion }}</td>
-                <td class="px-4 py-3 text-center"><span class="inline-flex items-center justify-center w-7 h-7 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">{{ item.miembros }}</span></td>
-                <td class="px-4 py-3 text-center">
-                  <div class="flex flex-col items-center gap-1">
-                    <span class="font-bold text-base" :class="item.puntaje_prioridad >= 80 ? 'text-red-600' : item.puntaje_prioridad >= 50 ? 'text-amber-600' : 'text-green-600'">{{ item.puntaje_prioridad }}</span>
-                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div :class="['h-full rounded-full', item.puntaje_prioridad >= 80 ? 'bg-red-500' : item.puntaje_prioridad >= 50 ? 'bg-amber-500' : 'bg-green-500']" :style="{ width: Math.min(item.puntaje_prioridad, 100) + '%' }"></div>
+                <td class="px-5 py-4 font-semibold text-slate-900 text-sm border-b border-slate-100/40">{{ item.representante }}</td>
+                <td class="px-5 py-4 text-slate-500 hidden sm:table-cell max-w-40 truncate border-b border-slate-100/40">{{ item.ubicacion }}</td>
+                <td class="px-5 py-4 text-center border-b border-slate-100/40">
+                  <span class="inline-flex items-center justify-center w-7 h-7 bg-emerald-50 text-emerald-700 border border-emerald-250 rounded-full text-xs font-bold">{{ item.miembros }}</span>
+                </td>
+                <td class="px-5 py-4 border-b border-slate-100/40">
+                  <div class="flex flex-col items-center gap-1.5">
+                    <span class="font-bold text-sm" :class="item.puntaje_prioridad >= 80 ? 'text-rose-600' : item.puntaje_prioridad >= 50 ? 'text-amber-600' : 'text-emerald-600'">{{ item.puntaje_prioridad }}</span>
+                    <div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200/50">
+                      <div :class="['h-full rounded-full', item.puntaje_prioridad >= 80 ? 'bg-rose-500' : item.puntaje_prioridad >= 50 ? 'bg-amber-500' : 'bg-emerald-600']" :style="{ width: Math.min(item.puntaje_prioridad, 100) + '%' }"></div>
                     </div>
                   </div>
                 </td>
-                <td class="px-4 py-3 text-center hidden md:table-cell">
-                  <span :class="['inline-block px-2 py-0.5 rounded-full text-xs font-medium', item.puntaje_prioridad >= 80 ? 'bg-red-100 text-red-700' : item.puntaje_prioridad >= 50 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700']">
+                <td class="px-5 py-4 text-center hidden md:table-cell border-b border-slate-100/40">
+                  <span :class="['inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold border uppercase tracking-wider border-slate-200', item.puntaje_prioridad >= 80 ? 'bg-rose-50 text-rose-700 border-rose-250 bg-rose-50/60' : item.puntaje_prioridad >= 50 ? 'bg-amber-50 text-amber-700 border-amber-250 bg-amber-50/60' : 'bg-emerald-50 text-emerald-700 border-emerald-250 bg-emerald-50/60']">
                     {{ item.puntaje_prioridad >= 80 ? 'Alta' : item.puntaje_prioridad >= 50 ? 'Media' : 'Baja' }}
                   </span>
                 </td>
-                <td class="px-4 py-3 text-xs text-slate-500 hidden lg:table-cell">
-                  <span v-if="item.raciones_necesarias">
+                <td class="px-5 py-4 text-xs text-slate-505 hidden lg:table-cell border-b border-slate-100/40">
+                  <span v-if="item.raciones_necesarias" class="font-medium">
                     💧 {{ item.raciones_necesarias.agua_litros }}L · 🍚 {{ item.raciones_necesarias.alimentos_kilos }}kg
                   </span>
                   <span v-else>—</span>
                 </td>
               </tr>
-              <tr v-if="filtrados.length === 0"><td colspan="7" class="px-4 py-12 text-center text-slate-400 text-sm">No hay familias priorizadas</td></tr>
+              <tr v-if="filtrados.length === 0"><td colspan="7" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">No hay familias priorizadas</td></tr>
             </tbody>
           </table>
         </div>
@@ -117,3 +136,10 @@ async function recargar() {
 }
 onMounted(recargar)
 </script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>

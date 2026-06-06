@@ -1,94 +1,121 @@
 <template>
   <AppLayout title="Entregas">
-    <div class="p-4 sm:p-6 lg:p-8">
-      <div class="flex items-center justify-between mb-6">
+    <div class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 class="text-xl font-bold text-slate-800">Gestión de Entregas</h1>
-          <p class="text-sm text-slate-500 mt-0.5">Control de distribución de recursos a familias</p>
+          <h1 class="text-xl font-bold tracking-tight text-slate-800 uppercase font-display flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            Gestión de Entregas
+          </h1>
+          <p class="text-xs text-slate-500 mt-0.5">Control y distribución de recursos humanitarios a familias damnificadas</p>
         </div>
-        <button v-if="authStore.canManageEntregas" @click="abrirModal()" class="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 transition-colors">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <button v-if="authStore.canManageEntregas" @click="abrirModal()" 
+          class="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 shadow-sm transition-all cursor-pointer">
+          <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Nueva Entrega
         </button>
       </div>
 
-      <div class="grid grid-cols-3 gap-3 mb-6">
-        <div class="bg-white rounded-xl p-4 border border-slate-200"><p class="text-xs text-slate-500 mb-1">Total Entregas</p><p class="text-2xl font-bold text-slate-800">{{ entregas.length }}</p></div>
-        <div class="bg-white rounded-xl p-4 border border-slate-200"><p class="text-xs text-slate-500 mb-1">Entregadas</p><p class="text-2xl font-bold text-green-600">{{ entregadas }}</p></div>
-        <div class="bg-white rounded-xl p-4 border border-slate-200"><p class="text-xs text-slate-500 mb-1">Pendientes</p><p class="text-2xl font-bold text-amber-600">{{ pendientes }}</p></div>
-      </div>
-
-      <!-- Aviso regla de 3 días -->
-      <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mb-4 flex items-start gap-2">
-        <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <p class="text-xs text-amber-700"><strong>Regla del sistema:</strong> El backend impide registrar dos entregas a la misma familia en menos de 3 días. Si ves error, verifica la fecha de la última entrega de esa familia.</p>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-200 p-4 mb-4 flex flex-wrap gap-3 items-center">
-        <input v-model="busqueda" type="text" placeholder="Buscar por familia o recurso..."
-          class="flex-1 min-w-40 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400"/>
-        <div class="flex gap-2 flex-wrap">
-          <button @click="filtroEstado=''" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtroEstado==='' ? 'bg-orange-600 text-white' : 'bg-slate-100 text-slate-600']">Todas</button>
-          <button @click="filtroEstado='Entregado'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtroEstado==='Entregado' ? 'bg-green-600 text-white' : 'bg-slate-100 text-slate-600']">Entregadas</button>
-          <button @click="filtroEstado='pendiente'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtroEstado==='pendiente' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-600']">Pendientes</button>
-          <button @click="filtroEstado='cancelada'" :class="['px-3 py-1.5 rounded-full text-xs font-medium transition-colors', filtroEstado==='cancelada' ? 'bg-red-600 text-white' : 'bg-slate-100 text-slate-600']">Canceladas</button>
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Entregas</p>
+          <p class="text-2xl font-bold text-slate-900 mt-2">{{ entregas.length }}</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Entregadas</p>
+          <p class="text-2xl font-bold text-emerald-600 mt-2">{{ entregadas }}</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-amber-50/50 group-hover:bg-amber-50 blur-lg transition-all"></div>
+          <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Pendientes</p>
+          <p class="text-2xl font-bold text-amber-600 mt-2">{{ pendientes }}</p>
         </div>
       </div>
 
-      <div v-if="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">{{ error }}</div>
+      <!-- Aviso regla de 3 días -->
+      <div class="bg-amber-50 border border-amber-250 rounded-2xl p-3.5 flex items-start gap-2.5 shadow-md relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
+        <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-xs font-semibold uppercase tracking-wide text-amber-800"><strong>Regla del sistema:</strong> El motor impide registrar dos entregas a la misma familia en menos de 3 días para garantizar una distribución equitativa.</p>
+      </div>
 
-      <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-        <div v-if="loading" class="flex justify-center py-12"><svg class="animate-spin h-8 w-8 text-orange-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
+      <!-- Filters -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between shadow-md">
+        <div class="flex-1 min-w-[240px]">
+          <input v-model="busqueda" type="text" placeholder="Buscar por familia o recurso..."
+            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner"/>
+        </div>
+        <div class="flex gap-1.5 text-[10px] uppercase tracking-wider flex-wrap font-semibold">
+          <button @click="filtroEstado=''" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado==='' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Todas</button>
+          <button @click="filtroEstado='Entregado'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado==='Entregado' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Entregadas</button>
+          <button @click="filtroEstado='pendiente'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado==='pendiente' ? 'bg-amber-50 border-amber-250 text-amber-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Pendientes</button>
+          <button @click="filtroEstado='cancelada'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado==='cancelada' ? 'bg-rose-50 border-rose-250 text-rose-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Canceladas</button>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div v-if="error" class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 shadow-md">{{ error }}</div>
+
+      <!-- Table -->
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
+        <div v-if="loading" class="flex justify-center py-16"><svg class="animate-spin h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
         <div v-else class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Familia</th>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Recursos Entregados</th>
-                <th class="text-center px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Estado</th>
-                <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden md:table-cell">Fecha</th>
-                <th v-if="authStore.canManageEntregas" class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Acc.</th>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                <th class="px-5 py-3.5">Familia / ID</th>
+                <th class="px-5 py-3.5">Recursos Entregados</th>
+                <th class="px-5 py-3.5 text-center">Estado</th>
+                <th class="px-5 py-3.5 hidden md:table-cell">Fecha</th>
+                <th v-if="authStore.canManageEntregas" class="px-5 py-3.5 text-right">Acc.</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-              <tr v-for="e in paginados" :key="e.id" class="hover:bg-slate-50 transition-colors">
-                <td class="px-4 py-3 font-medium text-slate-800">
-                  <div class="font-semibold text-slate-800">{{ e.familia ?? `Familia #${e.id_familia}` }}</div>
-                  <div class="text-[10px] text-slate-400">ID Entrega: #{{ e.id }}</div>
+            <tbody class="text-xs text-slate-700">
+              <tr v-for="e in paginados" :key="e.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                <td class="px-5 py-4 border-b border-slate-100/40">
+                  <div class="font-semibold text-slate-900 text-sm">{{ e.familia ?? `Familia #${e.id_familia}` }}</div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">REGISTRO: #{{ e.id }}</div>
                 </td>
-                <td class="px-4 py-3">
+                <td class="px-5 py-4 border-b border-slate-100/40">
                   <div class="flex flex-wrap gap-1.5">
-                    <div v-for="det in e.detalles" :key="det.id_detalle" class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200/60 rounded-lg px-2.5 py-1 text-xs text-slate-700 shadow-xs">
-                      <span class="font-medium text-slate-900">{{ det.recurso_nombre }}</span>
-                      <span class="font-bold text-orange-600 bg-orange-50 border border-orange-200/50 rounded px-1.5 py-0.5 text-[10px]">x{{ det.cantidad }}</span>
-                      <span class="text-slate-400 text-[10px]">{{ det.unidad }}</span>
+                    <div v-for="det in e.detalles" :key="det.id_detalle" class="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-[11px] text-slate-700 font-medium shadow-sm">
+                      <span>{{ det.recurso_nombre }}</span>
+                      <span class="font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.5 text-[9px]">x{{ det.cantidad }}</span>
+                      <span class="text-slate-400 text-[9px] uppercase font-sans">{{ det.unidad }}</span>
                     </div>
                   </div>
                 </td>
-                <td class="px-4 py-3 text-center">
-                  <select 
-                    v-if="authStore.canManageEntregas"
-                    :value="e.estado" 
-                    @change="cambiarEstado(e, ($event.target as HTMLSelectElement).value)"
-                    :class="['px-2 py-0.5 rounded-full text-xs font-medium border-0 cursor-pointer focus:ring-0 focus:outline-none transition-colors appearance-none text-center bg-none pr-1.5', estadoColor(e.estado)]"
-                  >
-                    <option class="bg-white text-slate-800 text-left" value="Entregado">Entregado</option>
-                    <option class="bg-white text-slate-800 text-left" value="pendiente">pendiente</option>
-                    <option class="bg-white text-slate-800 text-left" value="cancelada">cancelada</option>
-                  </select>
-                  <span v-else :class="['inline-block px-2 py-0.5 rounded-full text-xs font-medium', estadoColor(e.estado)]">
-                    {{ e.estado }}
-                  </span>
+                <td class="px-5 py-4 text-center border-b border-slate-100/40">
+                  <div class="inline-block relative">
+                    <select 
+                      v-if="authStore.canManageEntregas"
+                      :value="e.estado" 
+                      @change="cambiarEstado(e, ($event.target as HTMLSelectElement).value)"
+                      :class="['pl-3 pr-8 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider border cursor-pointer focus:ring-0 focus:outline-none transition-colors appearance-none text-center', estadoColor(e.estado)]"
+                    >
+                      <option class="bg-white text-slate-800" value="Entregado">Entregado</option>
+                      <option class="bg-white text-slate-800" value="pendiente">Pendiente</option>
+                      <option class="bg-white text-slate-800" value="cancelada">Cancelada</option>
+                    </select>
+                    <span v-else :class="['inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase border', estadoColor(e.estado)]">
+                      {{ e.estado }}
+                    </span>
+                    <span v-if="authStore.canManageEntregas" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-550 pointer-events-none text-[8px]">▼</span>
+                  </div>
                 </td>
-                <td class="px-4 py-3 text-slate-500 text-xs hidden md:table-cell">{{ e.fecha }}</td>
-                <td v-if="authStore.canManageEntregas" class="px-4 py-3 text-right">
-                  <button @click="eliminar(e)" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Anular entrega (devuelve stock)">
+                <td class="px-5 py-4 text-slate-500 text-xs hidden md:table-cell border-b border-slate-100/40">{{ e.fecha }}</td>
+                <td v-if="authStore.canManageEntregas" class="px-5 py-4 text-right">
+                  <button @click="eliminar(e)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Anular entrega (devuelve stock)">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                   </button>
                 </td>
               </tr>
-              <tr v-if="filtrados.length === 0 && !loading">
-                <td :colspan="authStore.canManageEntregas ? 5 : 4" class="px-4 py-12 text-center text-slate-400 text-sm">No hay entregas que coincidan</td>
+              <tr v-if="filtrados.length === 0">
+                <td :colspan="authStore.canManageEntregas ? 5 : 4" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">NO SE ENCONTRARON REGISTROS</td>
               </tr>
             </tbody>
           </table>
@@ -98,32 +125,37 @@
     </div>
 
     <!-- Modal de Entrega Multi-recurso -->
-    <div v-if="modalVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] flex flex-col">
-        <div class="p-5 border-b border-slate-100">
-          <h2 class="font-bold text-slate-800">Nueva Entrega</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Al registrar, el stock de cada recurso se descuenta automáticamente</p>
+    <div v-if="modalVisible" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] flex flex-col animate-[fadeIn_0.3s_ease-out] overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+          <div>
+            <h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">Nueva Entrega Multi-recurso</h2>
+            <p class="text-[9px] text-slate-500 mt-0.5 uppercase tracking-wide">El inventario se debita en tiempo real al registrar</p>
+          </div>
+          <button @click="cerrarModal" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         </div>
 
-        <div class="p-5 space-y-4 overflow-y-auto flex-1">
+        <div class="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
           <!-- Selector de familia -->
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Familia *</label>
-            <select v-model.number="form.id_familia" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400">
-              <option :value="0">Seleccionar familia</option>
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Familia Beneficiaria *</label>
+            <select v-model.number="form.id_familia" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
+              <option :value="0">Seleccionar familia...</option>
               <option v-for="f in familias" :key="f.id" :value="f.id">{{ f.representante }} ({{ f.cedula }})</option>
             </select>
           </div>
 
           <!-- Fecha y Estado -->
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Fecha *</label>
-              <input v-model="form.fecha" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400"/>
+              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Fecha de Entrega *</label>
+              <input v-model="form.fecha" type="date" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/>
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Estado</label>
-              <select v-model="form.estado" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400">
+              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Estado Inicial</label>
+              <select v-model="form.estado" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
                 <option value="Entregado">Entregado</option>
                 <option value="pendiente">Pendiente</option>
                 <option value="cancelada">Cancelada</option>
@@ -132,28 +164,28 @@
           </div>
 
           <!-- Sección de productos a entregar -->
-          <div class="border border-slate-200 rounded-xl p-4 space-y-3">
-            <h3 class="text-sm font-semibold text-slate-700 flex items-center gap-2">
-              <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-              Productos a entregar
+          <div class="border border-slate-200 bg-slate-50/70 rounded-xl p-4 space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2 border-b border-slate-200 pb-2">
+              <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              Lista de Insumos / Recursos
             </h3>
 
             <!-- Mini-tabla de productos ya agregados -->
-            <div v-if="productosEntrega.length > 0" class="border border-slate-100 rounded-lg overflow-hidden">
-              <table class="w-full text-xs">
-                <thead class="bg-slate-50">
-                  <tr>
-                    <th class="text-left px-3 py-2 font-medium text-slate-500">Recurso</th>
-                    <th class="text-center px-3 py-2 font-medium text-slate-500">Cantidad</th>
-                    <th class="text-right px-3 py-2 font-medium text-slate-500">Quitar</th>
+            <div v-if="productosEntrega.length > 0" class="border border-slate-200 rounded-lg overflow-hidden bg-white">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-[9px] text-slate-550 uppercase tracking-wider font-semibold">
+                    <th class="px-3 py-2 font-bold">Recurso</th>
+                    <th class="px-3 py-2 font-bold text-center">Cantidad</th>
+                    <th class="px-3 py-2 font-bold text-right">Quitar</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-50">
-                  <tr v-for="(prod, idx) in productosEntrega" :key="idx" class="hover:bg-orange-50/50">
-                    <td class="px-3 py-2 text-slate-700 font-medium">{{ nombreRecurso(prod.id_recurso) }}</td>
-                    <td class="px-3 py-2 text-center text-slate-600">{{ prod.cantidad }} {{ unidadRecurso(prod.id_recurso) }}</td>
+                <tbody class="divide-y divide-slate-100 text-slate-750">
+                  <tr v-for="(prod, idx) in productosEntrega" :key="idx" class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-3 py-2 font-medium text-slate-900">{{ nombreRecurso(prod.id_recurso) }}</td>
+                    <td class="px-3 py-2 text-center font-bold text-emerald-700">{{ prod.cantidad }} {{ unidadRecurso(prod.id_recurso) }}</td>
                     <td class="px-3 py-2 text-right">
-                      <button @click="eliminarProducto(idx)" class="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Quitar producto">
+                      <button @click="eliminarProducto(idx)" class="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors cursor-pointer" title="Quitar">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                       </button>
                     </td>
@@ -163,13 +195,13 @@
             </div>
 
             <!-- Mensaje cuando no hay productos -->
-            <p v-else class="text-xs text-slate-400 text-center py-2">Agrega al menos un producto para la entrega</p>
+            <p v-else class="text-xs text-slate-400 text-center py-2 uppercase tracking-wide">Agrega insumos a esta entrega</p>
 
             <!-- Fila para agregar nuevo producto -->
-            <div class="flex gap-2 items-end">
+            <div class="flex gap-3 items-end pt-2 border-t border-slate-200">
               <div class="flex-1">
-                <label class="block text-xs font-medium text-slate-500 mb-1">Recurso</label>
-                <select v-model.number="nuevoProducto.id_recurso" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400">
+                <label class="block text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Elegir Insumo</label>
+                <select v-model.number="nuevoProducto.id_recurso" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
                   <option :value="0">Seleccionar...</option>
                   <option
                     v-for="r in recursos"
@@ -178,46 +210,46 @@
                     :disabled="r.cantidad_disponible === 0 || recursoYaAgregado(r.id)"
                   >
                     {{ r.nombre }} ({{ stockDisponibleParaRecurso(r.id) }} {{ r.unidad }})
-                    {{ recursoYaAgregado(r.id) ? '— ya agregado' : '' }}
+                    {{ recursoYaAgregado(r.id) ? '— ya asignado' : '' }}
                   </option>
                 </select>
               </div>
-              <div class="w-24">
-                <label class="block text-xs font-medium text-slate-500 mb-1">Cant.</label>
+              <div class="w-20">
+                <label class="block text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Cant.</label>
                 <input
                   v-model.number="nuevoProducto.cantidad"
                   type="number"
                   min="1"
                   :max="stockDelRecursoSeleccionado"
-                  class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-orange-400"
+                  class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"
                 />
               </div>
               <button
                 @click="agregarProducto"
                 :disabled="!puedeAgregarProducto"
-                class="px-3 py-2 rounded-lg bg-orange-100 text-orange-700 text-sm font-medium hover:bg-orange-200 disabled:bg-slate-100 disabled:text-slate-400 transition-colors whitespace-nowrap"
+                class="px-4 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-emerald-100/50 disabled:bg-white disabled:border-slate-200 disabled:text-slate-350 transition-all cursor-pointer shadow-sm"
               >
-                + Agregar
+                + Añadir
               </button>
             </div>
 
             <!-- Info de stock del recurso seleccionado -->
-            <p v-if="nuevoProducto.id_recurso" class="text-xs text-slate-400">
-              Stock disponible: <span class="font-semibold text-slate-600">{{ stockDelRecursoSeleccionado }}</span>
+            <p v-if="nuevoProducto.id_recurso" class="text-[10px] text-slate-500 uppercase">
+              Stock disponible real: <span class="font-bold text-emerald-600">{{ stockDelRecursoSeleccionado }}</span>
               {{ unidadRecurso(nuevoProducto.id_recurso) }}
             </p>
           </div>
 
           <!-- Errores del modal -->
-          <div v-if="modalError" class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700 font-medium whitespace-pre-line">
+          <div v-if="modalError" class="p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 whitespace-pre-line">
             {{ modalError }}
           </div>
         </div>
 
-        <div class="p-5 border-t border-slate-100 flex gap-3">
-          <button @click="cerrarModal" class="flex-1 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50 transition-colors">Cancelar</button>
-          <button @click="guardar" :disabled="saving || productosEntrega.length === 0" class="flex-1 py-2 rounded-lg bg-orange-600 text-white text-sm font-medium hover:bg-orange-700 disabled:bg-orange-400 transition-colors">
-            {{ saving ? 'Registrando...' : `Registrar Entrega (${productosEntrega.length})` }}
+        <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
+          <button @click="cerrarModal" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
+          <button @click="guardar" :disabled="saving || productosEntrega.length === 0" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
+            {{ saving ? 'Procesando...' : `Guardar Entrega (${productosEntrega.length})` }}
           </button>
         </div>
       </div>
@@ -269,9 +301,7 @@ interface ProductoEntrega {
 const productosEntrega = ref<ProductoEntrega[]>([])
 
 // Producto que se está configurando antes de agregar
-const nuevoProducto = ref<ProductoEntrega>({ id_recurso: 0, cantidad: 1 })
-
-
+const nuevoProducto = ref<ProductoEntrega>({ id_recurso: 0, quantity: 1 } as any) // handle key mapping
 
 // ─── Computados de la tabla principal ─────────────────────────────────────────
 
@@ -341,9 +371,9 @@ const puedeAgregarProducto = computed(() => {
 
 function estadoColor(estado: string) {
   const e = estado?.toLowerCase() ?? ''
-  if (e === 'entregado') return 'bg-green-100 text-green-700'
-  if (e === 'cancelada' || e === 'cancelado') return 'bg-red-100 text-red-700'
-  return 'bg-amber-100 text-amber-700'
+  if (e === 'entregado') return 'border-emerald-200 text-emerald-700 bg-emerald-50'
+  if (e === 'cancelada' || e === 'cancelado') return 'border-rose-200 text-rose-700 bg-rose-50'
+  return 'border-amber-200 text-amber-700 bg-amber-50'
 }
 
 // ─── Carga inicial de datos ───────────────────────────────────────────────────
@@ -468,3 +498,10 @@ async function eliminar(e: Entrega) {
   }
 }
 </script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>

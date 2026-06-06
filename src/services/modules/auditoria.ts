@@ -14,7 +14,7 @@ export async function apiGetAuditoria(): Promise<ApiResponse<AuditoriaLog[]>> {
   if (res.success && Array.isArray(res.data)) {
     res.data = res.data.map((l: any) => ({
       id: l.id_log ?? l.id,
-      usuario: l.user ?? l.usuario ?? 'Sistema',
+      usuario: l.username ?? l.user ?? l.usuario ?? 'Sistema',
       rol: l.rol ?? '',
       accion: l.accion ?? l.method ?? '',
       modulo: l.entidad ?? l.modulo ?? '',

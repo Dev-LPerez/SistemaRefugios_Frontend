@@ -1,17 +1,21 @@
 <template>
   <AppLayout title="Donaciones">
-    <div class="p-4 sm:p-6 lg:p-8">
-      <div class="flex items-center justify-between mb-6">
+    <div class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
-          <h1 class="text-xl font-bold text-slate-800">Donaciones y Donantes</h1>
-          <p class="text-sm text-slate-500 mt-0.5">Registro de aportes y benefactores</p>
+          <h1 class="text-xl font-bold tracking-tight text-slate-800 uppercase font-display flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            Donaciones y Donantes
+          </h1>
+          <p class="text-xs text-slate-500 mt-0.5">Registro de aportes y benefactores</p>
         </div>
         <div class="flex gap-2">
-          <div class="hidden sm:flex bg-slate-100 rounded-lg p-1 gap-1">
-            <button @click="tab='donaciones'" :class="['px-3 py-1.5 text-xs font-medium rounded-md transition-colors', tab==='donaciones' ? 'bg-white shadow text-pink-700' : 'text-slate-500']">Donaciones</button>
-            <button @click="tab='donantes'" :class="['px-3 py-1.5 text-xs font-medium rounded-md transition-colors', tab==='donantes' ? 'bg-white shadow text-pink-700' : 'text-slate-500']">Donantes</button>
+          <div class="hidden sm:flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 text-[10px] uppercase tracking-wider font-semibold">
+            <button @click="tab='donaciones'" :class="['px-3 py-1.5 rounded-lg transition-all cursor-pointer', tab==='donaciones' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Donaciones</button>
+            <button @click="tab='donantes'" :class="['px-3 py-1.5 rounded-lg transition-all cursor-pointer', tab==='donantes' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Donantes</button>
           </div>
-          <button @click="tab==='donaciones' ? abrirModalDonacion() : abrirModalDonante()" class="inline-flex items-center gap-2 bg-pink-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-700 transition-colors">
+          <button @click="tab==='donaciones' ? abrirModalDonacion() : abrirModalDonante()" class="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 shadow-sm transition-all cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             {{ tab === 'donaciones' ? 'Nueva Donación' : 'Nuevo Donante' }}
           </button>
@@ -19,31 +23,31 @@
       </div>
 
       <!-- Mobile tabs -->
-      <div class="sm:hidden flex bg-slate-100 rounded-lg p-1 gap-1 mb-4">
-        <button @click="tab='donaciones'" :class="['flex-1 py-1.5 text-xs font-medium rounded-md', tab==='donaciones' ? 'bg-white shadow text-pink-700' : 'text-slate-500']">Donaciones</button>
-        <button @click="tab='donantes'" :class="['flex-1 py-1.5 text-xs font-medium rounded-md', tab==='donantes' ? 'bg-white shadow text-pink-700' : 'text-slate-500']">Donantes</button>
+      <div class="sm:hidden flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 mb-4 text-[10px] uppercase tracking-wider font-semibold">
+        <button @click="tab='donaciones'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='donaciones' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500']">Donaciones</button>
+        <button @click="tab='donantes'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='donantes' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500']">Donantes</button>
       </div>
 
-      <div v-if="error" class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-600">{{ error }}</div>
+      <div v-if="error" class="p-4 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 shadow-sm">{{ error }}</div>
 
       <!-- ── TAB DONACIONES ── -->
       <template v-if="tab === 'donaciones'">
         <!-- Stats + controles (3 columnas) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
-          <div class="bg-white rounded-xl p-4 border border-slate-200">
-            <p class="text-xs text-slate-500 mb-1">Donaciones encontradas</p>
-            <p class="text-2xl font-bold text-slate-800">{{ donaciones.length }}</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+            <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Donaciones encontradas</p>
+            <p class="text-2xl font-bold text-slate-900 mt-2">{{ donaciones.length }}</p>
           </div>
-          <div class="bg-white rounded-xl p-4 border border-slate-200">
-            <p class="text-xs text-slate-500 mb-1">Donantes Activos</p>
-            <p class="text-2xl font-bold text-pink-600">{{ donantes.length }}</p>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
+            <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Donantes Activos</p>
+            <p class="text-2xl font-bold text-emerald-600 mt-2">{{ donantes.length }}</p>
           </div>
           <!-- Buscar por ID -->
-          <div class="bg-white rounded-xl p-4 border border-slate-200">
-            <p class="text-xs text-slate-500 mb-1">Buscar por ID</p>
-            <div class="flex gap-1">
-              <input v-model.number="buscarId" type="number" min="1" placeholder="ID..." class="flex-1 w-0 px-2 py-1 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/>
-              <button @click="buscarDonacion" :disabled="!buscarId || buscando" class="px-2 py-1 bg-pink-600 text-white rounded-lg text-xs hover:bg-pink-700 disabled:opacity-50 transition-colors">
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between shadow-md">
+            <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Buscar por ID</p>
+            <div class="flex gap-1.5 mt-2">
+              <input v-model.number="buscarId" type="number" min="1" placeholder="ID..." class="flex-1 w-0 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none shadow-inner"/>
+              <button @click="buscarDonacion" :disabled="!buscarId || buscando" class="px-3.5 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-colors shadow-sm cursor-pointer">
                 <svg v-if="buscando" class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
                 <span v-else>Ir</span>
               </button>
@@ -52,79 +56,81 @@
         </div>
 
         <!-- Detalle de donación buscada -->
-        <div v-if="donacionDetalle" class="bg-white rounded-xl border border-pink-200 p-5 mb-4">
+        <div v-if="donacionDetalle" class="bg-white rounded-2xl border border-emerald-250 p-5 shadow-md animate-[fadeIn_0.3s_ease-out]">
           <div class="flex items-center justify-between mb-3">
-            <h3 class="font-semibold text-slate-800">Donación #{{ donacionDetalle.id_donacion ?? donacionDetalle.id }}</h3>
-            <button @click="donacionDetalle=null" class="text-slate-400 hover:text-slate-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wider">Donación #{{ donacionDetalle.id_donacion ?? donacionDetalle.id }}</h3>
+            <button @click="donacionDetalle=null" class="text-slate-400 hover:text-slate-650 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
           </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm mb-4">
-            <div><p class="text-xs text-slate-500">Fecha</p><p class="font-medium">{{ donacionDetalle.fecha }}</p></div>
-            <div><p class="text-xs text-slate-500">Categoría</p><p class="font-medium">{{ donacionDetalle.categoria }}</p></div>
-            <div><p class="text-xs text-slate-500">Origen</p><p class="font-medium">{{ donacionDetalle.origen }}</p></div>
-            <div><p class="text-xs text-slate-500">Descripción</p><p class="font-medium truncate">{{ donacionDetalle.descripcion }}</p></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs mb-4 text-slate-600">
+            <div><p class="text-[10px] text-slate-400 font-bold uppercase">Fecha</p><p class="font-semibold text-slate-800 mt-0.5">{{ donacionDetalle.fecha }}</p></div>
+            <div><p class="text-[10px] text-slate-400 font-bold uppercase">Categoría</p><p class="font-semibold text-slate-800 mt-0.5">{{ donacionDetalle.categoria }}</p></div>
+            <div><p class="text-[10px] text-slate-400 font-bold uppercase">Origen</p><p class="font-semibold text-slate-800 mt-0.5">{{ donacionDetalle.origen }}</p></div>
+            <div><p class="text-[10px] text-slate-400 font-bold uppercase">Descripción</p><p class="font-semibold text-slate-800 mt-0.5 truncate">{{ donacionDetalle.descripcion }}</p></div>
           </div>
           <div v-if="donacionDetalle.detalles?.length">
-            <p class="text-xs font-semibold text-slate-500 uppercase mb-2">Recursos incluidos</p>
-            <table class="w-full text-sm">
-              <thead><tr class="text-left border-b border-slate-100">
-                <th class="pb-1 text-xs font-semibold text-slate-400">Recurso</th>
-                <th class="pb-1 text-xs font-semibold text-slate-400">Tipo</th>
-                <th class="pb-1 text-xs font-semibold text-slate-400">Cantidad</th>
-                <th class="pb-1 text-xs font-semibold text-slate-400">Unidad</th>
-              </tr></thead>
-              <tbody class="divide-y divide-slate-50">
-                <tr v-for="d in donacionDetalle.detalles" :key="d.id_detalle">
-                  <td class="py-1.5 font-medium text-slate-700">{{ d.nombre }}</td>
-                  <td class="py-1.5 text-slate-500">{{ d.tipo }}</td>
-                  <td class="py-1.5 font-bold text-pink-600">{{ d.cantidad }}</td>
-                  <td class="py-1.5 text-slate-500">{{ d.unidad }}</td>
-                </tr>
-              </tbody>
-            </table>
+            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Recursos incluidos</p>
+            <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+              <table class="w-full text-xs">
+                <thead><tr class="text-left bg-emerald-50/50 border-b border-emerald-200 text-emerald-800 font-bold">
+                  <th class="px-3 py-2">Recurso</th>
+                  <th class="px-3 py-2">Tipo</th>
+                  <th class="px-3 py-2 text-center">Cantidad</th>
+                  <th class="px-3 py-2">Unidad</th>
+                </tr></thead>
+                <tbody class="divide-y divide-slate-100 text-slate-700 bg-white">
+                  <tr v-for="d in donacionDetalle.detalles" :key="d.id_detalle" class="odd:bg-white even:bg-emerald-50/10 hover:bg-emerald-50/30 transition-colors">
+                    <td class="px-3 py-2 font-semibold">{{ d.nombre }}</td>
+                    <td class="px-3 py-2 text-slate-500">{{ d.tipo }}</td>
+                    <td class="px-3 py-2 text-center font-bold text-emerald-700">{{ d.cantidad }}</td>
+                    <td class="px-3 py-2 text-slate-400">{{ d.unidad }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <p v-else class="text-xs text-slate-400">Sin detalles de recursos registrados</p>
+          <p v-else class="text-xs text-slate-400 uppercase tracking-wide">Sin detalles de recursos registrados</p>
         </div>
 
         <!-- Tabla de donaciones -->
-        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
           <!-- Loading -->
           <div v-if="loadingDonaciones" class="flex justify-center py-12">
-            <svg class="animate-spin h-8 w-8 text-pink-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+            <svg class="animate-spin h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
           </div>
           <div v-else class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead class="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">ID</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Descripción</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden sm:table-cell">Donante</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden md:table-cell">Categoría</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden md:table-cell">Origen</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Fecha</th>
-                  <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Acc.</th>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                  <th class="px-5 py-3.5">ID</th>
+                  <th class="px-5 py-3.5">Descripción</th>
+                  <th class="px-5 py-3.5 hidden sm:table-cell">Donante</th>
+                  <th class="px-5 py-3.5 hidden md:table-cell">Categoría</th>
+                  <th class="px-5 py-3.5 hidden md:table-cell">Origen</th>
+                  <th class="px-5 py-3.5">Fecha</th>
+                  <th class="px-5 py-3.5 text-right">Acc.</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
-                <tr v-for="d in donacionesPaginadas" :key="d.id" class="hover:bg-slate-50 transition-colors">
-                  <td class="px-4 py-3"><span class="font-mono text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded">#{{ d.id }}</span></td>
-                  <td class="px-4 py-3 font-medium text-slate-800 max-w-40 truncate">{{ d.descripcion }}</td>
-                  <td class="px-4 py-3 text-slate-500 hidden sm:table-cell">{{ nombreDonante(d.id_donante) }}</td>
-                  <td class="px-4 py-3 hidden md:table-cell"><span class="inline-block px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-xs">{{ d.categoria }}</span></td>
-                  <td class="px-4 py-3 text-slate-500 text-xs hidden md:table-cell">{{ d.origen }}</td>
-                  <td class="px-4 py-3 text-slate-500 text-xs">{{ d.fecha }}</td>
-                  <td class="px-4 py-3 text-right">
+              <tbody class="text-xs text-slate-700">
+                <tr v-for="d in donacionesPaginadas" :key="d.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                  <td class="px-5 py-4 border-b border-slate-100/40"><span class="bg-slate-50 border border-slate-200 text-slate-700 px-2 py-0.5 rounded font-semibold text-xs">#{{ d.id }}</span></td>
+                  <td class="px-5 py-4 font-semibold text-slate-900 max-w-40 truncate border-b border-slate-100/40">{{ d.descripcion }}</td>
+                  <td class="px-5 py-4 text-slate-500 hidden sm:table-cell border-b border-slate-100/40">{{ nombreDonante(d.id_donante) }}</td>
+                  <td class="px-5 py-4 hidden md:table-cell border-b border-slate-100/40"><span class="inline-block px-2 py-0.5 bg-emerald-55 text-emerald-800 bg-emerald-50/60 border border-emerald-200 rounded-full text-[10px] font-semibold uppercase tracking-wider">{{ d.categoria }}</span></td>
+                  <td class="px-5 py-4 text-slate-500 hidden md:table-cell border-b border-slate-100/40">{{ d.origen }}</td>
+                  <td class="px-5 py-4 text-slate-500 border-b border-slate-100/40">{{ d.fecha }}</td>
+                  <td class="px-5 py-4 text-right border-b border-slate-100/40">
                     <div class="flex items-center justify-end gap-1">
-                      <button @click="verDetalle(d.id)" class="p-1.5 rounded-lg text-slate-400 hover:text-pink-600 hover:bg-pink-50 transition-colors" title="Ver detalle y recursos">
+                      <button @click="verDetalle(d.id)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Ver detalle y recursos">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                       </button>
-                      <button @click="abrirModalDetalleExistente(d.id)" class="p-1.5 rounded-lg text-slate-400 hover:text-violet-600 hover:bg-violet-50 transition-colors" title="Agregar recurso">
+                      <button @click="abrirModalDetalleExistente(d.id)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Agregar recurso">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
                       </button>
                     </div>
                   </td>
                 </tr>
                 <tr v-if="donaciones.length === 0">
-                  <td colspan="7" class="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colspan="7" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">
                     No hay donaciones registradas.
                   </td>
                 </tr>
@@ -137,37 +143,37 @@
 
       <!-- ── TAB DONANTES ── -->
       <template v-else>
-        <div class="bg-white rounded-xl border border-slate-200 p-4 mb-4 flex gap-3">
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-md">
           <input v-model="busquedaDonante" type="text" placeholder="Buscar donante por nombre o identificación..."
-            class="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/>
+            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner"/>
         </div>
-        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <div v-if="loadingDonantes" class="flex justify-center py-12"><svg class="animate-spin h-8 w-8 text-pink-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
+          <div v-if="loadingDonantes" class="flex justify-center py-12"><svg class="animate-spin h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg></div>
           <div v-else class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead class="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Nombre</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden sm:table-cell">Identificación</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Tipo</th>
-                  <th class="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase hidden md:table-cell">Teléfono</th>
-                  <th class="text-right px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Acc.</th>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                  <th class="px-5 py-3.5">Nombre</th>
+                  <th class="px-5 py-3.5 hidden sm:table-cell">Identificación</th>
+                  <th class="px-5 py-3.5">Tipo</th>
+                  <th class="px-5 py-3.5 hidden md:table-cell">Teléfono</th>
+                  <th class="px-5 py-3.5 text-right">Acc.</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
-                <tr v-for="d in donantesPaginados" :key="d.id" class="hover:bg-slate-50 transition-colors">
-                  <td class="px-4 py-3 font-medium text-slate-800">{{ d.nombre }}</td>
-                  <td class="px-4 py-3 font-mono text-xs text-slate-500 hidden sm:table-cell">{{ d.identificacion }}</td>
-                  <td class="px-4 py-3"><span class="inline-block px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full text-xs">{{ d.tipo }}</span></td>
-                  <td class="px-4 py-3 text-slate-500 hidden md:table-cell">{{ d.telefono }}</td>
-                  <td class="px-4 py-3 text-right">
+              <tbody class="text-xs text-slate-700">
+                <tr v-for="d in donantesPaginados" :key="d.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                  <td class="px-5 py-4 font-semibold text-slate-900 text-sm border-b border-slate-100/40">{{ d.nombre }}</td>
+                  <td class="px-5 py-4 text-slate-500 hidden sm:table-cell border-b border-slate-100/40">{{ d.identificacion }}</td>
+                  <td class="px-5 py-4 border-b border-slate-100/40"><span class="inline-block px-2 py-0.5 bg-indigo-55 text-indigo-850 bg-indigo-50 border border-indigo-200 rounded-full text-[10px] font-semibold uppercase tracking-wider">{{ d.tipo }}</span></td>
+                  <td class="px-5 py-4 text-slate-500 hidden md:table-cell border-b border-slate-100/40">{{ d.telefono }}</td>
+                  <td class="px-5 py-4 text-right border-b border-slate-100/40 border-b border-slate-100/40">
                     <div class="flex items-center justify-end gap-1">
-                      <button @click="abrirModalDonante(d)" class="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                      <button @click="eliminarDonante(d)" class="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Eliminar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                      <button @click="abrirModalDonante(d)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
+                      <button @click="eliminarDonante(d)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Eliminar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
                     </div>
                   </td>
                 </tr>
-                <tr v-if="donantesFiltrados.length === 0"><td colspan="5" class="px-4 py-12 text-center text-slate-400 text-sm">No hay donantes registrados</td></tr>
+                <tr v-if="donantesFiltrados.length === 0"><td colspan="5" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-100/40">No hay donantes registrados</td></tr>
               </tbody>
             </table>
           </div>
@@ -177,62 +183,62 @@
     </div>
 
     <!-- Modal Nueva Donación (con recursos integrados) -->
-    <div v-if="modalDonacionVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] flex flex-col">
-        <div class="p-5 border-b border-slate-100">
-          <h2 class="font-bold text-slate-800">Nueva Donación</h2>
-          <p class="text-xs text-slate-400 mt-0.5">Registra la donación y sus recursos en un solo paso</p>
+    <div v-if="modalDonacionVisible" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl max-h-[90vh] flex flex-col animate-[fadeIn_0.3s_ease-out] overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">Nueva Donación</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Registra la donación y sus recursos en un solo paso</p>
         </div>
-        <div class="p-5 space-y-4 overflow-y-auto flex-1">
+        <div class="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
           <!-- Campos básicos de la donación -->
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Donante *</label>
-            <select v-model.number="formDon.id_donante" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400">
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Donante *</label>
+            <select v-model.number="formDon.id_donante" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
               <option :value="0">Seleccionar donante</option>
               <option v-for="d in donantes" :key="d.id" :value="d.id">{{ d.nombre }} ({{ d.tipo }})</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Descripción</label>
-            <textarea v-model="formDon.descripcion" rows="2" placeholder="Descripción de la donación..." class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400 resize-none"></textarea>
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Descripción</label>
+            <textarea v-model="formDon.descripcion" rows="2" placeholder="Descripción de la donación..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs resize-none shadow-inner"></textarea>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Categoría *</label>
-              <select v-model="formDon.categoria" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400">
+              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Categoría *</label>
+              <select v-model="formDon.categoria" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
                 <option value="">Seleccionar</option>
                 <option>Alimentos</option><option>Agua</option><option>Medicamentos</option><option>Ropa</option><option>Dinero</option><option>Otro</option>
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-slate-700 mb-1">Fecha *</label>
-              <input v-model="formDon.fecha" type="date" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/>
+              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Fecha *</label>
+              <input v-model="formDon.fecha" type="date" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/>
             </div>
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Origen</label>
-            <input v-model="formDon.origen" type="text" placeholder="Ej: Nacional, Internacional..." class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/>
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Origen</label>
+            <input v-model="formDon.origen" type="text" placeholder="Ej: Nacional, Internacional..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/>
           </div>
 
           <!-- Sección de recursos a donar -->
-          <div class="border-t border-slate-200 pt-4">
-            <p class="text-sm font-semibold text-slate-700 mb-3">Recursos a donar</p>
+          <div class="border-t border-slate-200 pt-4 space-y-3">
+            <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Recursos a donar</p>
             <!-- Mini-tabla de recursos agregados -->
-            <div v-if="detallesArray.length > 0" class="mb-3 border border-slate-200 rounded-lg overflow-hidden">
-              <table class="w-full text-sm">
-                <thead class="bg-slate-50">
-                  <tr>
-                    <th class="text-left px-3 py-2 text-xs font-semibold text-slate-500">Recurso</th>
-                    <th class="text-left px-3 py-2 text-xs font-semibold text-slate-500">Cantidad</th>
-                    <th class="px-3 py-2 text-xs font-semibold text-slate-500 w-10"></th>
+            <div v-if="detallesArray.length > 0" class="border border-slate-200 rounded-lg overflow-hidden bg-white">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-[9px] text-slate-550 uppercase tracking-wider font-semibold">
+                    <th class="px-3 py-2">Recurso</th>
+                    <th class="px-3 py-2 text-center">Cantidad</th>
+                    <th class="px-3 py-2 w-10 text-right"></th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100">
-                  <tr v-for="(item, idx) in detallesArray" :key="idx">
-                    <td class="px-3 py-2 text-slate-700">{{ nombreRecurso(item.id_recurso) }}</td>
-                    <td class="px-3 py-2 font-bold text-pink-600">{{ item.cantidad }}</td>
-                    <td class="px-3 py-2 text-center">
-                      <button @click="detallesArray.splice(idx, 1)" class="text-red-400 hover:text-red-600 transition-colors" title="Quitar">
+                <tbody class="divide-y divide-slate-100 text-slate-750">
+                  <tr v-for="(item, idx) in detallesArray" :key="idx" class="hover:bg-slate-50/50 transition-colors">
+                    <td class="px-3 py-2 text-slate-900 font-medium">{{ nombreRecurso(item.id_recurso) }}</td>
+                    <td class="px-3 py-2 text-center font-bold text-emerald-700">{{ item.cantidad }}</td>
+                    <td class="px-3 py-2 text-right">
+                      <button @click="detallesArray.splice(idx, 1)" class="p-1 rounded text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors cursor-pointer" title="Quitar">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                       </button>
                     </td>
@@ -241,82 +247,82 @@
               </table>
             </div>
             <!-- Fila para agregar nuevo recurso -->
-            <div class="flex items-end gap-2">
+            <div class="flex items-end gap-3 pt-2 border-t border-slate-200">
               <div class="flex-1">
-                <label class="block text-xs text-slate-500 mb-1">Recurso</label>
-                <select v-model.number="nuevoDetalle.id_recurso" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-violet-400">
+                <label class="block text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Recurso</label>
+                <select v-model.number="nuevoDetalle.id_recurso" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
                   <option :value="0">Seleccionar recurso</option>
                   <option v-for="r in recursos" :key="r.id" :value="r.id">{{ r.nombre }} ({{ r.tipo }} · {{ r.unidad }})</option>
                 </select>
               </div>
               <div class="w-24">
-                <label class="block text-xs text-slate-500 mb-1">Cantidad</label>
-                <input v-model.number="nuevoDetalle.cantidad" type="number" min="1" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-violet-400"/>
+                <label class="block text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Cantidad</label>
+                <input v-model.number="nuevoDetalle.cantidad" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/>
               </div>
-              <button @click="agregarDetalleAlArray" :disabled="!nuevoDetalle.id_recurso || nuevoDetalle.cantidad < 1" class="px-3 py-2 bg-violet-600 text-white rounded-lg text-sm font-medium hover:bg-violet-700 disabled:opacity-50 transition-colors whitespace-nowrap">
+              <button @click="agregarDetalleAlArray" :disabled="!nuevoDetalle.id_recurso || nuevoDetalle.cantidad < 1" class="px-4 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-emerald-100/50 disabled:bg-white disabled:border-slate-200 disabled:text-slate-350 transition-all cursor-pointer shadow-sm whitespace-nowrap">
                 + Agregar
               </button>
             </div>
           </div>
 
-          <div v-if="modalDonError" class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">{{ modalDonError }}</div>
+          <div v-if="modalDonError" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700">{{ modalDonError }}</div>
         </div>
-        <div class="p-5 border-t border-slate-100 flex gap-3">
-          <button @click="modalDonacionVisible=false" class="flex-1 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50">Cancelar</button>
-          <button @click="guardarDonacion" :disabled="savingDon" class="flex-1 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 disabled:bg-pink-400">{{ savingDon ? 'Guardando...' : 'Registrar Donación' }}</button>
+        <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
+          <button @click="modalDonacionVisible=false" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
+          <button @click="guardarDonacion" :disabled="savingDon" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">{{ savingDon ? 'Guardando...' : 'Registrar Donación' }}</button>
         </div>
       </div>
     </div>
 
     <!-- Modal Agregar Recurso a Donación Existente -->
-    <div v-if="modalDetalleVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-xl">
-        <div class="p-5 border-b border-slate-100">
-          <h2 class="font-bold text-slate-800">Agregar Recurso a Donación #{{ detalleIdDonacion }}</h2>
-          <p class="text-xs text-slate-400 mt-0.5">El stock del recurso aumentará automáticamente</p>
+    <div v-if="modalDetalleVisible" class="fixed inset-0 bg-slate-955/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-md shadow-xl animate-[fadeIn_0.3s_ease-out] overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100">
+          <h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">Agregar Recurso a Donación #{{ detalleIdDonacion }}</h2>
+          <p class="text-xs text-slate-550 mt-0.5">El stock del recurso aumentará automáticamente</p>
         </div>
-        <div class="p-5 space-y-4">
+        <div class="p-5 space-y-4 text-xs">
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Recurso *</label>
-            <select v-model.number="formDetalle.id_recurso" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-violet-400">
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Recurso *</label>
+            <select v-model.number="formDetalle.id_recurso" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
               <option :value="0">Seleccionar recurso</option>
               <option v-for="r in recursos" :key="r.id" :value="r.id">{{ r.nombre }} ({{ r.tipo }} · {{ r.unidad }})</option>
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-slate-700 mb-1">Cantidad *</label>
-            <input v-model.number="formDetalle.cantidad" type="number" min="1" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-violet-400"/>
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Cantidad *</label>
+            <input v-model.number="formDetalle.cantidad" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/>
           </div>
-          <div v-if="modalDetalleError" class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">{{ modalDetalleError }}</div>
-          <div v-if="modalDetalleOk" class="p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">{{ modalDetalleOk }}</div>
+          <div v-if="modalDetalleError" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700">{{ modalDetalleError }}</div>
+          <div v-if="modalDetalleOk" class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 font-semibold">{{ modalDetalleOk }}</div>
         </div>
-        <div class="p-5 border-t border-slate-100 flex gap-3">
-          <button @click="modalDetalleVisible=false; modalDetalleOk=''" class="flex-1 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50">Cerrar</button>
-          <button @click="guardarDetalle" :disabled="savingDetalle" class="flex-1 py-2 rounded-lg bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 disabled:bg-violet-400">{{ savingDetalle ? 'Agregando...' : 'Agregar Recurso' }}</button>
+        <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
+          <button @click="modalDetalleVisible=false; modalDetalleOk=''" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cerrar</button>
+          <button @click="guardarDetalle" :disabled="savingDetalle" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">{{ savingDetalle ? 'Agregando...' : 'Agregar Recurso' }}</button>
         </div>
       </div>
     </div>
 
     <!-- Modal Donante -->
-    <div v-if="modalDonanteVisible" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div class="bg-white rounded-2xl w-full max-w-md shadow-xl">
-        <div class="p-5 border-b border-slate-100"><h2 class="font-bold text-slate-800">{{ editandoDonante ? 'Editar Donante' : 'Nuevo Donante' }}</h2></div>
-        <div class="p-5 space-y-4">
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Nombre *</label><input v-model="formDonante.nombre" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/></div>
+    <div v-if="modalDonanteVisible" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-md shadow-xl animate-[fadeIn_0.3s_ease-out] overflow-hidden">
+        <div class="px-5 py-4 border-b border-slate-100"><h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">{{ editandoDonante ? 'Editar Donante' : 'Nuevo Donante' }}</h2></div>
+        <div class="p-5 space-y-4 text-xs">
+          <div><label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Nombre *</label><input v-model="formDonante.nombre" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/></div>
           <div class="grid grid-cols-2 gap-3">
-            <div><label class="block text-sm font-medium text-slate-700 mb-1">Identificación *</label><input v-model="formDonante.identificacion" type="text" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/></div>
-            <div><label class="block text-sm font-medium text-slate-700 mb-1">Tipo *</label>
-              <select v-model="formDonante.tipo" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400">
+            <div><label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Identificación *</label><input v-model="formDonante.identificacion" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/></div>
+            <div><label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Tipo *</label>
+              <select v-model="formDonante.tipo" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs">
                 <option>Persona Natural</option><option>Empresa</option><option>ONG</option><option>Gobierno</option>
               </select>
             </div>
           </div>
-          <div><label class="block text-sm font-medium text-slate-700 mb-1">Teléfono</label><input v-model="formDonante.telefono" type="tel" class="w-full px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-pink-400"/></div>
-          <div v-if="modalDonanteError" class="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">{{ modalDonanteError }}</div>
+          <div><label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Teléfono</label><input v-model="formDonante.telefono" type="tel" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-emerald-500 text-xs shadow-inner"/></div>
+          <div v-if="modalDonanteError" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700">{{ modalDonanteError }}</div>
         </div>
-        <div class="p-5 border-t border-slate-100 flex gap-3">
-          <button @click="modalDonanteVisible=false" class="flex-1 py-2 rounded-lg border border-slate-200 text-sm text-slate-600 hover:bg-slate-50">Cancelar</button>
-          <button @click="guardarDonante" :disabled="savingDonante" class="flex-1 py-2 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 disabled:bg-pink-400">{{ savingDonante ? 'Guardando...' : 'Guardar' }}</button>
+        <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
+          <button @click="modalDonanteVisible=false" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
+          <button @click="guardarDonante" :disabled="savingDonante" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">{{ savingDonante ? 'Guardando...' : 'Guardar' }}</button>
         </div>
       </div>
     </div>
@@ -561,3 +567,10 @@ async function eliminarDonante(d: Donante) {
   else error.value = res.message ?? 'Error'
 }
 </script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
