@@ -30,3 +30,18 @@ export async function apiLogin(
     return { success: false, message: 'Error de conexión con el servidor' }
   }
 }
+
+// ─── Logout ──────────────────────────────────────────────────────────────────
+
+export async function apiLogout(): Promise<ApiResponse<null>> {
+  try {
+    const res = await publicClient.post('', {}, { params: { route: 'login', action: 'logout' } })
+    const json = res.data
+    if (json.status === 200) {
+      return { success: true, data: null }
+    }
+    return { success: false, message: json.message ?? 'Error al cerrar sesión' }
+  } catch {
+    return { success: false, message: 'Error de conexión con el servidor' }
+  }
+}

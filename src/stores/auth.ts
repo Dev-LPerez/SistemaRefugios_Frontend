@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { apiLogin, type Usuario } from '@/services/api'
+import { apiLogin, apiLogout, type Usuario } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<Usuario | null>(null)
-  const token = ref<string | null>(localStorage.getItem('token'))
+  const token = ref<string | null>(null) // Solo en memoria
   const loading = ref(false)
   const error = ref<string | null>(null)
 
-  const isAuthenticated = computed(() => !!token.value)
+  const isAuthenticated = computed(() => !!user.value)
   const userRol = computed(() => user.value?.rol ?? null)
 
   // Roles reales del backend: Admin | Logistica | Operario | Voluntario | Auditor
@@ -39,7 +39,6 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.success && response.data) {
         user.value = response.data.usuario
         token.value = response.data.token
-        localStorage.setItem('token', response.data.token)
         localStorage.setItem('user', JSON.stringify(response.data.usuario))
         return true
       } else {
@@ -54,18 +53,20 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function logout() {
+  async function logout() {
+    try {
+      await apiLogout()
+    } catch (e) {
+      console.error('Error al cerrar sesión en el servidor:', e)
+    }
     user.value = null
     token.value = null
-    localStorage.removeItem('token')
     localStorage.removeItem('user')
   }
 
   function initAuth() {
-    if (token.value) {
-      const saved = localStorage.getItem('user')
-      if (saved) user.value = JSON.parse(saved)
-    }
+    const saved = localStorage.getItem('user')
+    if (saved) user.value = JSON.parse(saved)
   }
 
   return {

@@ -31,6 +31,7 @@ export type {
 export {
   // Auth
   apiLogin,
+  apiLogout,
   // Usuarios
   apiGetUsuarios,
   apiCreateUsuario,

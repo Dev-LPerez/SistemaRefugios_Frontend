@@ -14,6 +14,7 @@ const BASE_URL = import.meta.env.VITE_API_URL ?? 'https://sistemarefugios-backen
 export const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 })
 
 // Interceptor de REQUEST: agrega token automáticamente
@@ -49,6 +50,7 @@ apiClient.interceptors.response.use(
 export const publicClient = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 })
 
 /** Helper para hacer llamadas con query params estilo ?route=X&id=Y */
