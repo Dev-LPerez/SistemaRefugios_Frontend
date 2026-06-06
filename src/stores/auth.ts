@@ -1,0 +1,78 @@
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { apiLogin, type Usuario } from '@/services/api'
+
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref<Usuario | null>(null)
+  const token = ref<string | null>(localStorage.getItem('token'))
+  const loading = ref(false)
+  const error = ref<string | null>(null)
+
+  const isAuthenticated = computed(() => !!token.value)
+  const userRol = computed(() => user.value?.rol ?? null)
+
+  // Roles reales del backend: Admin | Logistica | Operario | Voluntario | Auditor
+  const canManageFamilias = computed(() =>
+    ['Admin', 'Operario', 'Voluntario'].includes(user.value?.rol ?? '')
+  )
+  const canManageRecursos = computed(() =>
+    ['Admin', 'Logistica'].includes(user.value?.rol ?? '')
+  )
+  const canManageEntregas = computed(() =>
+    ['Admin', 'Logistica', 'Operario', 'Voluntario'].includes(user.value?.rol ?? '')
+  )
+  const canViewAuditoria = computed(() =>
+    ['Admin', 'Auditor'].includes(user.value?.rol ?? '')
+  )
+  const canViewReportes = computed(() =>
+    ['Admin', 'Auditor', 'Logistica', 'Operario'].includes(user.value?.rol ?? '')
+  )
+  const canManageRefugios = computed(() =>
+    ['Admin', 'Logistica', 'Operario'].includes(user.value?.rol ?? '')
+  )
+
+  async function login(userInput: string, password: string) {
+    loading.value = true
+    error.value = null
+    try {
+      const response = await apiLogin(userInput, password)
+      if (response.success && response.data) {
+        user.value = response.data.usuario
+        token.value = response.data.token
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user', JSON.stringify(response.data.usuario))
+        return true
+      } else {
+        error.value = response.message || 'Credenciales inválidas'
+        return false
+      }
+    } catch (e) {
+      error.value = 'Error de conexión con el servidor'
+      return false
+    } finally {
+      loading.value = false
+    }
+  }
+
+  function logout() {
+    user.value = null
+    token.value = null
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  }
+
+  function initAuth() {
+    if (token.value) {
+      const saved = localStorage.getItem('user')
+      if (saved) user.value = JSON.parse(saved)
+    }
+  }
+
+  return {
+    user, token, loading, error,
+    isAuthenticated, userRol,
+    canManageFamilias, canManageRecursos, canManageEntregas,
+    canViewAuditoria, canViewReportes, canManageRefugios,
+    login, logout, initAuth
+  }
+})
