@@ -37,7 +37,7 @@
         <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
           <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-cyan-50/50 group-hover:bg-cyan-50 blur-lg transition-all"></div>
           <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Unidades Totales</p>
-          <p class="text-2xl font-bold text-cyan-600 mt-2">{{ totalUnidades }}</p>
+          <p class="text-2xl font-bold text-cyan-600 mt-2">{{ totalUnidades }} / 20,000 kg</p>
         </div>
       </div>
 

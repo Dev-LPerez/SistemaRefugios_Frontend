@@ -97,6 +97,9 @@
                 </td>
                 <td class="px-5 py-4 text-right border-b border-slate-100/40">
                   <div class="flex items-center justify-end gap-1">
+                    <button @click="verFamilias(r)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-650 hover:bg-slate-50 transition-colors" title="Ver familias alojadas">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </button>
                     <button @click="abrirModal(r)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Editar">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
@@ -134,12 +137,12 @@
             <input v-model="form.nombre" type="text" placeholder="Ej: Refugio Norte" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
           </div>
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Dirección *</label>
-            <input v-model="form.direccion" type="text" placeholder="Calle, barrio..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Dirección del Refugio *</label>
+            <input v-model="form.direccion" type="text" placeholder="Ej: Calle 10 #20-30" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
           </div>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Capacidad Max *</label>
+              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Capacidad Máxima *</label>
               <input v-model.number="form.capacidad_maxima" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
             </div>
             <div>
@@ -160,6 +163,64 @@
           <button @click="cerrarModal" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
           <button @click="guardar" :disabled="saving" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
             {{ saving ? 'Procesando...' : 'Confirmar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Familias Alojadas -->
+    <div v-if="modalFamiliasVisible && refugioSeleccionado" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-2xl shadow-2xl p-6 relative overflow-hidden animate-[fadeIn_0.2s_ease-out]">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+          <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider font-display flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            Familias Alojadas: {{ refugioSeleccionado.nombre }}
+          </h3>
+          <button @click="cerrarModalFamilias" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Content -->
+        <div class="space-y-4">
+          <p class="text-xs text-slate-500">Listado de familias asignadas actualmente a este refugio temporal.</p>
+          
+          <div class="max-h-80 overflow-y-auto border border-slate-200 rounded-xl bg-white shadow-inner">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                  <th class="px-4 py-2.5">Representante</th>
+                  <th class="px-4 py-2.5">Cédula</th>
+                  <th class="px-4 py-2.5">Teléfono</th>
+                  <th class="px-4 py-2.5 text-center">Integrantes</th>
+                  <th class="px-4 py-2.5 text-center">Prioridad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="fam in familiasDelRefugio" :key="fam.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                  <td class="px-4 py-2.5 font-bold text-slate-900 border-b border-slate-100/40">{{ fam.representante }}</td>
+                  <td class="px-4 py-2.5 text-slate-650 border-b border-slate-100/40">{{ fam.cedula }}</td>
+                  <td class="px-4 py-2.5 text-slate-500 border-b border-slate-100/40">{{ fam.telefono || '—' }}</td>
+                  <td class="px-4 py-2.5 text-center font-bold text-slate-800 border-b border-slate-100/40">{{ fam.cantidad_miembros }}</td>
+                  <td class="px-4 py-2.5 text-center border-b border-slate-100/40">
+                    <span class="inline-block px-2 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-[9px] font-bold">
+                      {{ fam.prioridad }}
+                    </span>
+                  </td>
+                </tr>
+                <tr v-if="familiasDelRefugio.length === 0">
+                  <td colspan="5" class="px-4 py-8 text-center text-slate-400 font-semibold uppercase tracking-wider">No hay familias asignadas a este refugio</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-5">
+          <button @click="cerrarModalFamilias" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-650 rounded-xl font-bold uppercase tracking-wider transition-colors cursor-pointer text-xs">
+            Cerrar
           </button>
         </div>
       </div>
@@ -186,6 +247,24 @@ const perPage = ref(20)
 const modalVisible = ref(false)
 const editando = ref<Refugio | null>(null)
 const form = ref({ nombre: '', direccion: '', capacidad_maxima: 100, ocupacion_actual: 0, estado: 'activo' as 'activo' | 'inactivo' })
+
+const refugioSeleccionado = ref<Refugio | null>(null)
+const modalFamiliasVisible = ref(false)
+
+function verFamilias(r: Refugio) {
+  refugioSeleccionado.value = r
+  modalFamiliasVisible.value = true
+}
+
+function cerrarModalFamilias() {
+  refugioSeleccionado.value = null
+  modalFamiliasVisible.value = false
+}
+
+const familiasDelRefugio = computed(() => {
+  if (!refugioSeleccionado.value) return []
+  return familias.value.filter(f => Number(f.id_refugio) === refugioSeleccionado.value!.id)
+})
 
 // Ocupación real calculada desde familias (el backend no actualiza ocupacion_actual automáticamente)
 function ocupacionReal(refugioId: number): number {
