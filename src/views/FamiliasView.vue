@@ -242,7 +242,7 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Cant. Miembros</label>
-              <input v-model.number="form.cantidad_miembros" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <input :value="editando ? form.cantidad_miembros : 0" type="number" disabled class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 text-xs"/>
             </div>
             <div>
               <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Prioridad</label>
@@ -377,7 +377,7 @@ const familiaParaMiembro = ref<Familia | null>(null)
 // ── Forms ─────────────────────────────────────────────────────────────────────
 const form = ref({
   cedula: '', representante: '', telefono: '', direccion: '',
-  cantidad_miembros: 1, prioridad: 10, id_refugio: 0,
+  cantidad_miembros: 0, prioridad: 10, id_refugio: 0,
   ubicacion_actual: 'Vivienda', aceptacion_habeas_data: false
 })
 const formMiembro = ref({
@@ -451,7 +451,7 @@ function abrirModal(f?: Familia) {
   editando.value = f ?? null
   form.value = f
     ? { cedula: f.cedula, representante: f.representante, telefono: f.telefono, direccion: f.direccion, cantidad_miembros: f.cantidad_miembros, prioridad: f.prioridad, id_refugio: f.id_refugio, ubicacion_actual: f.ubicacion_actual, aceptacion_habeas_data: f.aceptacion_habeas_data }
-    : { cedula: '', representante: '', telefono: '', direccion: '', cantidad_miembros: 1, prioridad: 10, id_refugio: 0, ubicacion_actual: 'Vivienda', aceptacion_habeas_data: false }
+    : { cedula: '', representante: '', telefono: '', direccion: '', cantidad_miembros: 0, prioridad: 10, id_refugio: 0, ubicacion_actual: 'Vivienda', aceptacion_habeas_data: false }
   modalError.value = ''
   modalVisible.value = true
 }
@@ -535,12 +535,21 @@ async function guardarMiembro() {
       if (res.success) {
         const idx = miembros.value.findIndex(x => x.id === editandoMiembro.value!.id)
         if (idx !== -1) miembros.value[idx] = { ...miembros.value[idx], ...formMiembro.value }
+        
+        // Recargar familias para actualizar prioridades (puesto que cambiaron datos de vulnerabilidad)
+        const resFam = await apiGetFamilias()
+        if (resFam.success && resFam.data) familias.value = resFam.data
       } else { modalMiembroError.value = res.message ?? 'Error al actualizar' }
     } else {
       const res = await apiCreateMiembro(formMiembro.value as any)
       if (res.success) {
         // Recargar miembros de esta familia
         await cargarMiembros()
+        
+        // Recargar familias para actualizar conteo y prioridades
+        const resFam = await apiGetFamilias()
+        if (resFam.success && resFam.data) familias.value = resFam.data
+
         // Si se agregó desde la fila de familia, cambiar al tab de miembros
         if (tab.value === 'familias') {
           familiaSeleccionada.value = formMiembro.value.familia_id
@@ -560,8 +569,13 @@ async function eliminarMiembro(m: MiembroFamilia) {
     return
   }
   const res = await apiDeleteMiembro(m.id, motivo.trim())
-  if (res.success) miembros.value = miembros.value.filter(x => x.id !== m.id)
-  else error.value = res.message ?? 'Error al eliminar'
+  if (res.success) {
+    miembros.value = miembros.value.filter(x => x.id !== m.id)
+    
+    // Recargar familias para actualizar conteo y prioridades
+    const resFam = await apiGetFamilias()
+    if (resFam.success && resFam.data) familias.value = resFam.data
+  } else error.value = res.message ?? 'Error al eliminar'
 }
 </script>
 
