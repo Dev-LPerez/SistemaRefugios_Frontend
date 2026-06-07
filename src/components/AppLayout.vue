@@ -1,17 +1,17 @@
 <template>
-  <div class="flex min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
+  <div class="flex min-h-screen bg-slate-50 text-slate-900 font-sans antialiased print:bg-white print:min-h-0">
     <!-- Sidebar a la izquierda -->
-    <TheSidebar ref="sidebar" />
+    <TheSidebar ref="sidebar" class="print:hidden" />
 
     <!-- Área principal pushed by sidebar -->
     <div
       :class="[
-        'flex-1 flex flex-col min-h-screen transition-all duration-300',
+        'flex-1 flex flex-col min-h-screen transition-all duration-300 print:ml-0 print:bg-white print:min-h-0',
         sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'
       ]"
     >
       <!-- Navbar Superior (Escritorio y Móvil) -->
-      <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-20">
+      <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-20 print:hidden">
         <div class="flex items-center gap-3">
           <!-- Botón Toggle Sidebar (Móvil) -->
           <button @click="toggleSidebar" class="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer">
@@ -67,7 +67,7 @@
       </header>
 
       <!-- Main Content -->
-      <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden print:p-0">
         <slot />
       </main>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <AppLayout title="Reportes">
-    <div class="space-y-6 animate-[fadeIn_0.4s_ease-out]">
+    <div class="space-y-6 animate-[fadeIn_0.4s_ease-out] print:hidden">
       <!-- Header -->
       <div class="flex items-center justify-between border-b border-slate-200 pb-5">
         <div>
@@ -10,10 +10,16 @@
           </h1>
           <p class="text-xs text-slate-500 mt-0.5">Seguimiento del flujo de recursos hasta las familias</p>
         </div>
-        <button @click="recargar" :disabled="loading" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 shadow-sm transition-all cursor-pointer">
-          <svg :class="['w-4 h-4', loading && 'animate-spin']" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          Actualizar
-        </button>
+        <div class="flex items-center gap-2">
+          <button @click="exportarPDF" :disabled="loading || trazabilidad.length === 0" class="inline-flex items-center justify-center gap-2 bg-slate-800 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-slate-900 disabled:bg-slate-200 disabled:text-slate-400 shadow-sm transition-all cursor-pointer">
+            <svg class="w-4.5 h-4.5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.617 0-1.11-.476-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-14.326 0C3.768 7.28 3 8.214 3 9.296v6.454a2.25 2.25 0 0 0 2.25 2.25h1.091M9 10.125h6M9 13h6"/></svg>
+            Exportar PDF
+          </button>
+          <button @click="recargar" :disabled="loading" class="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 shadow-sm transition-all cursor-pointer">
+            <svg :class="['w-4 h-4', loading && 'animate-spin']" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            Actualizar
+          </button>
+        </div>
       </div>
 
       <!-- Stats -->
@@ -80,6 +86,76 @@
         <PaginationBar v-if="filtrados.length > 0" v-model:page="page" v-model:perPage="perPage" :total="filtrados.length" />
       </div>
     </div>
+
+    <!-- Contenedor Oficial de Impresión PDF -->
+    <div class="hidden print:block font-sans text-slate-900 p-2 space-y-6">
+      <!-- Cabecera Oficial -->
+      <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4">
+        <div>
+          <h1 class="text-base font-black uppercase tracking-wider text-slate-900">Alivio Humanitario Montería</h1>
+          <p class="text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-0.5">Reporte Oficial de Trazabilidad y Distribución</p>
+        </div>
+        <div class="text-right text-[9px] text-slate-500 font-semibold space-y-0.5">
+          <div>Fecha de Emisión: {{ new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' }) }}</div>
+          <div>Operador: {{ authStore.user?.nombre || 'Usuario Autorizado' }}</div>
+          <div>Rol: {{ authStore.user?.rol || 'Operador' }}</div>
+        </div>
+      </div>
+
+      <!-- Resumen de Métricas -->
+      <div class="grid grid-cols-3 gap-4 border border-slate-350 rounded-xl p-3 bg-slate-50">
+        <div class="text-center">
+          <div class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest">Total Despachos</div>
+          <div class="text-base font-black text-slate-800 mt-1">{{ filtrados.length }}</div>
+        </div>
+        <div class="text-center border-x border-slate-350">
+          <div class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest">Recursos Distribuidos</div>
+          <div class="text-base font-black text-indigo-700 mt-1">{{ recursosDistribuidos }}</div>
+        </div>
+        <div class="text-center">
+          <div class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest">Familias Beneficiadas</div>
+          <div class="text-base font-black text-cyan-700 mt-1">{{ familiasBeneficiadas }}</div>
+        </div>
+      </div>
+
+      <!-- Tabla de Trazabilidad Completa -->
+      <table class="w-full text-left text-[9px] border-collapse">
+        <thead>
+          <tr class="border-b-2 border-slate-900 bg-slate-100 font-bold uppercase tracking-wider text-slate-800">
+            <th class="px-2 py-2 w-16">Despacho</th>
+            <th class="px-2 py-2">Recurso</th>
+            <th class="px-2 py-2 text-center w-16">Cant.</th>
+            <th class="px-2 py-2">Familia Receptora</th>
+            <th class="px-2 py-2">Ubicación</th>
+            <th class="px-2 py-2">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in filtrados" :key="item.id_entrega" class="border-b border-slate-200">
+            <td class="px-2 py-2 font-bold text-slate-500">#{{ item.id_entrega }}</td>
+            <td class="px-2 py-2 font-semibold text-slate-900">{{ item.recurso }}</td>
+            <td class="px-2 py-2 text-center font-bold text-slate-800">{{ item.cantidad_entregada }}</td>
+            <td class="px-2 py-2 text-slate-750 font-medium">{{ item.familia_receptora }}</td>
+            <td class="px-2 py-2 text-slate-600 truncate max-w-48">{{ item.ubicacion_receptora }}</td>
+            <td class="px-2 py-2 text-slate-500 font-mono">{{ item.fecha_entrega }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Firmas de Validación Oficial -->
+      <div class="pt-16 grid grid-cols-2 gap-12">
+        <div class="text-center space-y-1">
+          <div class="border-t border-slate-400 w-44 mx-auto"></div>
+          <div class="text-[8px] font-bold uppercase tracking-wider text-slate-700">Firma Responsable de Almacén</div>
+          <div class="text-[7px] text-slate-400">Consola de Logística y Trazabilidad</div>
+        </div>
+        <div class="text-center space-y-1">
+          <div class="border-t border-slate-400 w-44 mx-auto"></div>
+          <div class="text-[8px] font-bold uppercase tracking-wider text-slate-700">Firma Interventor de Emergencia</div>
+          <div class="text-[7px] text-slate-400">Control de Entregas y Alivio Humanitario</div>
+        </div>
+      </div>
+    </div>
   </AppLayout>
 </template>
 
@@ -87,7 +163,10 @@
 import { ref, computed, onMounted } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import { useAuthStore } from '@/stores/auth'
 import { apiGetTrazabilidad, type TrazabilidadItem } from '@/services/api'
+
+const authStore = useAuthStore()
 
 const trazabilidad = ref<TrazabilidadItem[]>([])
 const loading = ref(true); const error = ref('')
@@ -108,6 +187,10 @@ async function recargar() {
   const res = await apiGetTrazabilidad()
   if (res.success && res.data) trazabilidad.value = res.data; else error.value = res.message ?? 'Error al cargar trazabilidad'
   loading.value = false
+}
+
+function exportarPDF() {
+  window.print()
 }
 onMounted(recargar)
 </script>
