@@ -127,6 +127,7 @@
             <th class="px-2 py-2 text-center w-16">Cant.</th>
             <th class="px-2 py-2">Familia Receptora</th>
             <th class="px-2 py-2">Ubicación</th>
+            <th class="px-2 py-2">Posibles Orígenes</th>
             <th class="px-2 py-2">Fecha</th>
           </tr>
         </thead>
@@ -136,7 +137,8 @@
             <td class="px-2 py-2 font-semibold text-slate-900">{{ item.recurso }}</td>
             <td class="px-2 py-2 text-center font-bold text-slate-800">{{ item.cantidad_entregada }}</td>
             <td class="px-2 py-2 text-slate-750 font-medium">{{ item.familia_receptora }}</td>
-            <td class="px-2 py-2 text-slate-600 truncate max-w-48">{{ item.ubicacion_receptora }}</td>
+            <td class="px-2 py-2 text-slate-600 truncate max-w-40">{{ item.ubicacion_receptora }}</td>
+            <td class="px-2 py-2 text-slate-500 truncate max-w-40">{{ item.posibles_origenes }}</td>
             <td class="px-2 py-2 text-slate-500 font-mono">{{ item.fecha_entrega }}</td>
           </tr>
         </tbody>
