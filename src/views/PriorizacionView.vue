@@ -89,9 +89,20 @@
                   </span>
                 </td>
                 <td class="px-5 py-4 text-xs text-slate-505 hidden lg:table-cell border-b border-slate-100/40">
-                  <span v-if="item.raciones_necesarias" class="font-medium">
-                    💧 {{ item.raciones_necesarias.agua_litros }}L · 🍚 {{ item.raciones_necesarias.alimentos_kilos }}kg
-                  </span>
+                  <div v-if="item.raciones_necesarias" class="flex flex-wrap gap-x-3 gap-y-1 font-medium">
+                    <span class="inline-flex items-center gap-1 text-[11px] text-slate-650">
+                      <svg class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                      </svg>
+                      {{ item.raciones_necesarias.agua_litros }}L
+                    </span>
+                    <span class="inline-flex items-center gap-1 text-[11px] text-slate-650">
+                      <svg class="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                      </svg>
+                      {{ item.raciones_necesarias.alimentos_kilos }}kg
+                    </span>
+                  </div>
                   <span v-else>—</span>
                 </td>
               </tr>

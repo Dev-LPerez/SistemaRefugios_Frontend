@@ -50,7 +50,11 @@ export async function put<T>(route: string, id: number, data: unknown): Promise<
 
 export async function del<T>(route: string, id: number, motivo?: string): Promise<ApiResponse<T>> {
   try {
-    const res = await apiClient.delete('', { params: { route, id, motivo } })
+    const params: Record<string, any> = { route, id }
+    if (motivo) {
+      params.motivo = motivo
+    }
+    const res = await apiClient.delete('', { params })
     return normalize<T>(res)
   } catch (err: any) {
     return { success: false, message: err.response?.data?.message ?? err.response?.data?.error ?? 'Error de conexión' }

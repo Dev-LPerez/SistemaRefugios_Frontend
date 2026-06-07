@@ -5,12 +5,12 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h1 class="text-xl font-bold tracking-tight text-slate-800 uppercase font-display flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
             Gestión de Refugios
           </h1>
           <p class="text-xs text-slate-500 mt-0.5">Albergues temporales de emergencia activos e inactivos</p>
         </div>
-        <button @click="abrirModal()" class="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 shadow-sm transition-all cursor-pointer">
+        <button @click="abrirModal()" class="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-sm transition-all cursor-pointer">
           <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Nuevo Refugio
         </button>
@@ -19,14 +19,14 @@
       <!-- Stats -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
-          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-indigo-50/50 group-hover:bg-indigo-50 blur-lg transition-all"></div>
           <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Refugios</p>
           <p class="text-2xl font-bold text-slate-900 mt-2">{{ refugios.length }}</p>
         </div>
         <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
-          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-indigo-50/50 group-hover:bg-indigo-50 blur-lg transition-all"></div>
           <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Activos</p>
-          <p class="text-2xl font-bold text-emerald-600 mt-2">{{ refugiosActivos }}</p>
+          <p class="text-2xl font-bold text-indigo-600 mt-2">{{ refugiosActivos }}</p>
         </div>
         <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md">
           <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-cyan-50/50 group-hover:bg-cyan-50 blur-lg transition-all"></div>
@@ -44,11 +44,11 @@
       <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap gap-4 items-center justify-between shadow-md">
         <div class="flex-1 min-w-[280px]">
           <input v-model="busqueda" type="text" placeholder="Buscar por nombre o dirección..."
-            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner"/>
+            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all shadow-inner"/>
         </div>
         <div class="flex gap-1.5 text-[10px] uppercase tracking-wider font-semibold">
-          <button @click="filtroEstado = ''" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado === '' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Todos</button>
-          <button @click="filtroEstado = 'activo'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado === 'activo' ? 'bg-emerald-50 border-emerald-250 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Activos</button>
+          <button @click="filtroEstado = ''" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado === '' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Todos</button>
+          <button @click="filtroEstado = 'activo'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado === 'activo' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Activos</button>
           <button @click="filtroEstado = 'inactivo'" :class="['px-3 py-2 rounded-lg border transition-all cursor-pointer', filtroEstado === 'inactivo' ? 'bg-rose-50 border-rose-250 text-rose-700' : 'bg-white border-slate-200 text-slate-500 hover:text-slate-700']">Inactivos</button>
         </div>
       </div>
@@ -59,12 +59,12 @@
       <!-- Table -->
       <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
         <div v-if="loading" class="flex justify-center py-16">
-          <svg class="animate-spin h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+          <svg class="animate-spin h-7 w-7 text-indigo-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
         </div>
         <div v-else class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+              <tr class="bg-indigo-50/80 border-b border-indigo-200 text-[10px] uppercase tracking-wider text-indigo-800 font-bold">
                 <th class="px-5 py-3.5">Nombre</th>
                 <th class="px-5 py-3.5 hidden sm:table-cell">Dirección</th>
                 <th class="px-5 py-3.5 text-center">Ocupación / Capacidad</th>
@@ -73,7 +73,7 @@
               </tr>
             </thead>
             <tbody class="text-xs text-slate-700">
-              <tr v-for="r in paginados" :key="r.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+              <tr v-for="r in paginados" :key="r.id" class="odd:bg-white even:bg-indigo-50/20 hover:bg-indigo-100/30 transition-colors">
                 <td class="px-5 py-4 font-semibold text-slate-900 text-sm border-b border-slate-100/40">{{ r.nombre }}</td>
                 <td class="px-5 py-4 text-slate-500 hidden sm:table-cell max-w-48 truncate border-b border-slate-100/40">{{ r.direccion }}</td>
                 <td class="px-5 py-4 border-b border-slate-100/40">
@@ -100,10 +100,10 @@
                     <button @click="verFamilias(r)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-650 hover:bg-slate-50 transition-colors" title="Ver familias alojadas">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     </button>
-                    <button @click="abrirModal(r)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Editar">
+                    <button @click="abrirModal(r)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-colors" title="Editar">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                     </button>
-                    <button @click="toggleEstado(r)" :class="['p-2 rounded-lg transition-colors', r.estado === 'activo' ? 'text-slate-400 hover:text-amber-600 hover:bg-slate-50' : 'text-slate-400 hover:text-emerald-600 hover:bg-slate-50']" :title="r.estado === 'activo' ? 'Desactivar' : 'Activar'">
+                    <button @click="toggleEstado(r)" :class="['p-2 rounded-lg transition-colors', r.estado === 'activo' ? 'text-slate-400 hover:text-amber-600 hover:bg-slate-50' : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50']" :title="r.estado === 'activo' ? 'Desactivar' : 'Activar'">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
                     </button>
                     <button @click="eliminar(r)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Eliminar">
@@ -134,25 +134,25 @@
         <div class="p-5 space-y-4 text-xs">
           <div>
             <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Nombre del Refugio *</label>
-            <input v-model="form.nombre" type="text" placeholder="Ej: Refugio Norte" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <input v-model="form.nombre" type="text" placeholder="Ej: Refugio Norte" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div>
             <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Dirección del Refugio *</label>
-            <input v-model="form.direccion" type="text" placeholder="Ej: Calle 10 #20-30" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <input v-model="form.direccion" type="text" placeholder="Ej: Calle 10 #20-30" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Capacidad Máxima *</label>
-              <input v-model.number="form.capacidad_maxima" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <input v-model.number="form.capacidad_maxima" type="number" min="1" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
             <div>
               <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Ocupación Inicial</label>
-              <input v-model.number="form.ocupacion_actual" type="number" min="0" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <input v-model.number="form.ocupacion_actual" type="number" min="0" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
           </div>
           <div>
             <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Estado Operativo</label>
-            <select v-model="form.estado" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs">
+            <select v-model="form.estado" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs">
               <option value="activo">Activo</option>
               <option value="inactivo">Inactivo</option>
             </select>
@@ -161,7 +161,7 @@
         </div>
         <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
           <button @click="cerrarModal" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
-          <button @click="guardar" :disabled="saving" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
+          <button @click="guardar" :disabled="saving" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
             {{ saving ? 'Procesando...' : 'Confirmar' }}
           </button>
         </div>
@@ -174,7 +174,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
           <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider font-display flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
             Familias Alojadas: {{ refugioSeleccionado.nombre }}
           </h3>
           <button @click="cerrarModalFamilias" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
@@ -189,7 +189,7 @@
           <div class="max-h-80 overflow-y-auto border border-slate-200 rounded-xl bg-white shadow-inner">
             <table class="w-full text-xs text-left border-collapse">
               <thead>
-                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                <tr class="bg-indigo-50/80 border-b border-indigo-200 text-[10px] uppercase tracking-wider text-indigo-800 font-bold">
                   <th class="px-4 py-2.5">Representante</th>
                   <th class="px-4 py-2.5">Cédula</th>
                   <th class="px-4 py-2.5">Teléfono</th>
@@ -198,7 +198,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="fam in familiasDelRefugio" :key="fam.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
+                <tr v-for="fam in familiasDelRefugio" :key="fam.id" class="odd:bg-white even:bg-indigo-50/20 hover:bg-indigo-100/30 transition-colors">
                   <td class="px-4 py-2.5 font-bold text-slate-900 border-b border-slate-100/40">{{ fam.representante }}</td>
                   <td class="px-4 py-2.5 text-slate-650 border-b border-slate-100/40">{{ fam.cedula }}</td>
                   <td class="px-4 py-2.5 text-slate-500 border-b border-slate-100/40">{{ fam.telefono || '—' }}</td>

@@ -18,12 +18,12 @@ function mapEntrega(e: any): Entrega {
     familia: e.familia_representante ?? e.familia ?? e.representante ?? null,
     detalles: Array.isArray(e.detalles)
       ? e.detalles.map((d: any) => ({
-          id_detalle: d.id_detalle,
-          id_recurso: d.id_recurso,
-          recurso_nombre: d.recurso_nombre,
-          unidad: d.unidad,
-          cantidad: Number(d.cantidad),
-        }))
+        id_detalle: d.id_detalle,
+        id_recurso: d.id_recurso,
+        recurso_nombre: d.recurso_nombre,
+        unidad: d.unidad,
+        cantidad: Number(d.cantidad),
+      }))
       : [],
   }
 }

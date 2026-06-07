@@ -4,14 +4,14 @@
       <div class="flex justify-between items-center h-16">
         <!-- Logo -->
         <router-link to="/" class="flex items-center gap-2.5 group">
-          <div class="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center shadow-sm group-hover:bg-emerald-700 transition-colors">
+          <div class="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm group-hover:bg-indigo-700 transition-colors">
             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
             </svg>
           </div>
           <div class="flex flex-col">
             <span class="text-sm font-extrabold tracking-wider text-slate-900 font-display uppercase leading-tight">REFUGIOS</span>
-            <span class="text-[9px] font-mono tracking-widest text-emerald-600 -mt-0.5">MONTERÍA</span>
+            <span class="text-[9px] font-mono tracking-widest text-indigo-600 -mt-0.5">MONTERÍA</span>
           </div>
         </router-link>
 
@@ -19,22 +19,22 @@
         <div class="hidden md:flex items-center gap-1.5 font-display text-xs uppercase font-bold tracking-wider">
           <router-link 
             to="/" 
-            class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-            :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/' }"
+            class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+            :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/' }"
           >
             Inicio
           </router-link>
           <router-link 
             to="/about" 
-            class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-            :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/about' }"
+            class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+            :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/about' }"
           >
             Acerca de
           </router-link>
           <template v-if="!isAuthenticated">
             <router-link 
               to="/login" 
-              class="ml-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-all shadow-sm"
+              class="ml-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all shadow-sm"
             >
               Iniciar Sesión
             </router-link>
@@ -42,8 +42,8 @@
           <template v-else>
             <router-link 
               to="/dashboard" 
-              class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-              :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/dashboard' }"
+              class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+              :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/dashboard' }"
             >
               Dashboard
             </router-link>
@@ -74,16 +74,16 @@
           <router-link 
             to="/" 
             @click="mobileMenuOpen = false"
-            class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-            :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/' }"
+            class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+            :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/' }"
           >
             Inicio
           </router-link>
           <router-link 
             to="/about" 
             @click="mobileMenuOpen = false"
-            class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-            :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/about' }"
+            class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+            :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/about' }"
           >
             Acerca de
           </router-link>
@@ -91,7 +91,7 @@
             <router-link 
               to="/login" 
               @click="mobileMenuOpen = false"
-              class="px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-center font-bold"
+              class="px-4 py-2.5 bg-indigo-600 text-white rounded-lg text-center font-bold"
             >
               Iniciar Sesión
             </router-link>
@@ -100,8 +100,8 @@
             <router-link 
               to="/dashboard" 
               @click="mobileMenuOpen = false"
-              class="px-4 py-2 rounded-lg text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all"
-              :class="{ 'text-emerald-600 bg-slate-50': $route.path === '/dashboard' }"
+              class="px-4 py-2 rounded-lg text-slate-600 hover:text-indigo-600 hover:bg-slate-50 transition-all"
+              :class="{ 'text-indigo-600 bg-slate-50': $route.path === '/dashboard' }"
             >
               Dashboard
             </router-link>

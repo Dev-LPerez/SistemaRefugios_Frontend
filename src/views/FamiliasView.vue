@@ -5,17 +5,18 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
           <h1 class="text-xl font-bold tracking-tight text-slate-800 uppercase font-display flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-            Censo de Familias
+            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+            Censo & Priorización de Familias
           </h1>
-          <p class="text-xs text-slate-500 mt-0.5">Registro de familias damnificadas y sus miembros</p>
+          <p class="text-xs text-slate-500 mt-0.5">Control de familias vulnerables, miembros y motor de priorización</p>
         </div>
         <div class="flex items-center gap-3">
-          <div class="hidden sm:flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 text-[10px] uppercase tracking-wider font-semibold">
-            <button @click="tab='familias'" :class="['px-3.5 py-1.5 rounded-lg transition-all cursor-pointer', tab==='familias' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Familias</button>
-            <button @click="tab='miembros'" :class="['px-3.5 py-1.5 rounded-lg transition-all cursor-pointer', tab==='miembros' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Miembros</button>
+          <!-- Desktop tabs -->
+          <div class="hidden sm:flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 text-[10px] uppercase tracking-wider font-bold">
+            <button @click="tab='familias'" :class="['px-3.5 py-1.5 rounded-lg transition-all cursor-pointer', tab==='familias' ? 'bg-white text-indigo-600 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Censo General</button>
+            <button @click="tab='miembros'" :class="['px-3.5 py-1.5 rounded-lg transition-all cursor-pointer', tab==='miembros' ? 'bg-white text-indigo-600 border border-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-700 border border-transparent']">Miembros</button>
           </div>
-          <button v-if="authStore.canManageFamilias" @click="abrirModal()" class="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 shadow-sm transition-all cursor-pointer">
+          <button v-if="authStore.canManageFamilias" @click="abrirModal()" class="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-sm transition-all cursor-pointer">
             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             {{ tab === 'familias' ? 'Nueva Familia' : 'Nuevo Miembro' }}
           </button>
@@ -23,85 +24,83 @@
       </div>
 
       <!-- Mobile tabs -->
-      <div class="sm:hidden flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 mb-4 text-[10px] uppercase tracking-wider font-semibold">
-        <button @click="tab='familias'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='familias' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500']">Familias</button>
-        <button @click="tab='miembros'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='miembros' ? 'bg-white text-emerald-700 border border-slate-200 shadow-sm' : 'text-slate-500']">Miembros</button>
+      <div class="sm:hidden flex bg-slate-100 border border-slate-200 rounded-xl p-1 gap-1 mb-4 text-[10px] uppercase tracking-wider font-bold">
+        <button @click="tab='familias'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='familias' ? 'bg-white text-indigo-600 border border-slate-200 shadow-sm' : 'text-slate-500']">Familias</button>
+        <button @click="tab='miembros'" :class="['flex-1 py-2 text-center rounded-lg transition-all cursor-pointer', tab==='miembros' ? 'bg-white text-indigo-600 border border-slate-200 shadow-sm' : 'text-slate-500']">Miembros</button>
       </div>
+
+      <div v-if="error" class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 shadow-md">{{ error }}</div>
 
       <!-- ── TAB FAMILIAS ── -->
       <template v-if="tab === 'familias'">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md animate-[fadeIn_0.3s_ease-out]">
-            <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-sm animate-[fadeIn_0.3s_ease-out]">
             <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Familias</p>
-            <p class="text-2xl font-bold text-slate-900 mt-2">{{ familias.length }}</p>
+            <p class="text-2xl font-extrabold text-slate-900 mt-2">{{ familias.length }}</p>
           </div>
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md animate-[fadeIn_0.3s_ease-out]">
-            <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-emerald-50/50 group-hover:bg-emerald-50 blur-lg transition-all"></div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-sm animate-[fadeIn_0.3s_ease-out]">
             <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Total Personas</p>
-            <p class="text-2xl font-bold text-emerald-600 mt-2">{{ totalPersonas }}</p>
+            <p class="text-2xl font-extrabold text-indigo-600 mt-2">{{ totalPersonas }}</p>
           </div>
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md animate-[fadeIn_0.3s_ease-out]">
-            <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-cyan-50/50 group-hover:bg-cyan-50 blur-lg transition-all"></div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-sm animate-[fadeIn_0.3s_ease-out]">
             <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Prioridad Promedio</p>
-            <p class="text-2xl font-bold text-cyan-600 mt-2">{{ puntajePromedio }}</p>
+            <p class="text-2xl font-extrabold text-amber-600 mt-2">{{ puntajePromedio }} pts</p>
           </div>
-          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-md animate-[fadeIn_0.3s_ease-out]">
-            <div class="absolute -right-6 -bottom-6 w-16 h-16 rounded-full bg-rose-50/50 group-hover:bg-rose-50 blur-lg transition-all"></div>
+          <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between relative overflow-hidden group shadow-sm animate-[fadeIn_0.3s_ease-out]">
             <p class="text-[10px] font-bold uppercase text-slate-400 tracking-wider">Alta Prioridad</p>
-            <p class="text-2xl font-bold text-rose-600 mt-2">{{ familiasAltaPrioridad }}</p>
+            <p class="text-2xl font-extrabold text-rose-600 mt-2">{{ familiasAltaPrioridad }}</p>
           </div>
         </div>
 
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-md">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
           <input v-model="busqueda" type="text" placeholder="Buscar por cédula, representante o dirección..."
-            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition-all shadow-inner"/>
+            class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition-all shadow-inner"/>
         </div>
 
-        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
-          <div v-if="loading" class="flex justify-center py-16">
-            <svg class="animate-spin h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div v-if="loading" class="p-1">
+            <SkeletonTable :rows="6" />
           </div>
           <div v-else class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
+                <tr class="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500 font-bold">
                   <th class="px-5 py-3.5">Cédula</th>
                   <th class="px-5 py-3.5">Representante</th>
                   <th class="px-5 py-3.5 hidden sm:table-cell">Teléfono</th>
                   <th class="px-5 py-3.5 hidden md:table-cell">Dirección</th>
                   <th class="px-5 py-3.5 text-center">Miembros</th>
-                  <th class="px-5 py-3.5 text-center">Puntaje Prioridad</th>
+                  <th class="px-5 py-3.5 text-center">Prioridad</th>
                   <th class="px-5 py-3.5 text-center hidden sm:table-cell">Habeas</th>
                   <th class="px-5 py-3.5 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody class="text-xs text-slate-700">
-                <tr v-for="f in familiasPaginadas" :key="f.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
-                  <td class="px-5 py-4 border-b border-slate-100/40"><span class="text-xs bg-slate-50 border border-slate-200 px-2.5 py-1 rounded text-slate-700 font-semibold">{{ f.cedula }}</span></td>
-                  <td class="px-5 py-4 font-semibold text-slate-900 text-sm border-b border-slate-100/40">{{ f.representante }}</td>
-                  <td class="px-5 py-4 text-slate-500 hidden sm:table-cell border-b border-slate-100/40">{{ f.telefono || '—' }}</td>
-                  <td class="px-5 py-4 text-slate-500 text-xs hidden md:table-cell max-w-40 truncate border-b border-slate-100/40">{{ f.direccion }}</td>
-                  <td class="px-5 py-4 text-center border-b border-slate-100/40">
-                    <button @click="verMiembros(f)" class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-250 rounded-full text-xs font-semibold hover:bg-emerald-100/50 transition-all cursor-pointer shadow-sm" :title="'Ver miembros de ' + f.representante">
+                <tr v-for="f in familiasPaginadas" :key="f.id" class="border-b border-slate-150 hover:bg-slate-50 transition-colors">
+                  <td class="px-5 py-4"><span class="text-xs bg-slate-100 border border-slate-200 px-2 py-0.5 rounded text-slate-700 font-semibold">{{ f.cedula }}</span></td>
+                  <td class="px-5 py-4 font-semibold text-slate-900 text-sm">{{ f.representante }}</td>
+                  <td class="px-5 py-4 text-slate-500 hidden sm:table-cell">{{ f.telefono || '—' }}</td>
+                  <td class="px-5 py-4 text-slate-500 text-xs hidden md:table-cell max-w-40 truncate">{{ f.direccion }}</td>
+                  <td class="px-5 py-4 text-center">
+                    <button @click="verMiembros(f)" class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-full text-xs font-semibold hover:bg-indigo-100 transition-all cursor-pointer shadow-sm">
                       {{ f.cantidad_miembros }}
                       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                     </button>
                   </td>
-                  <td class="px-5 py-4 text-center border-b border-slate-100/40">
-                    <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border', f.prioridad >= 85 ? 'bg-rose-50 text-rose-700 border-rose-200' : f.prioridad >= 70 ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200']">
-                      {{ f.prioridad }}
+                  <td class="px-5 py-4 text-center">
+                    <span :class="['inline-block px-2.5 py-0.5 rounded-full text-xs font-bold border', Number(f.prioridad) >= 80 ? 'bg-rose-50 text-rose-700 border-rose-200' : Number(f.prioridad) >= 50 ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200']">
+                      {{ f.prioridad }} pts
                     </span>
                   </td>
-                  <td class="px-5 py-4 text-center hidden sm:table-cell border-b border-slate-100/40">
+                  <td class="px-5 py-4 text-center hidden sm:table-cell">
                     <span :class="f.aceptacion_habeas_data ? 'text-emerald-600 font-bold' : 'text-rose-600 font-bold'">{{ f.aceptacion_habeas_data ? '✓' : '✗' }}</span>
                   </td>
-                  <td class="px-5 py-4 text-right border-b border-slate-100/40">
+                  <td class="px-5 py-4 text-right">
                     <div class="flex items-center justify-end gap-1">
-                      <button @click="abrirModalMiembro(undefined, f)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Agregar miembro">
+                      <button @click="abrirModalMiembro(undefined, f)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-colors" title="Agregar miembro">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
                       </button>
-                      <button v-if="authStore.canManageFamilias" @click="abrirModal(f)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Editar familia">
+                      <button v-if="authStore.canManageFamilias" @click="abrirModal(f)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-colors" title="Editar familia">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
                       </button>
                       <button v-if="authStore.canManageFamilias" @click="eliminarFamilia(f)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Eliminar">
@@ -120,84 +119,81 @@
         </div>
       </template>
 
+
       <!-- ── TAB MIEMBROS ── -->
       <template v-else>
-        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap gap-4 items-end justify-between shadow-md">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-wrap gap-4 items-end justify-between shadow-sm">
           <div class="flex-1 min-w-[260px] space-y-1.5 text-xs">
-            <label class="text-slate-500 font-semibold uppercase tracking-wider block">Filtrar por Familia *</label>
-            <select v-model="familiaSeleccionada" @change="cargarMiembros" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-700 outline-none focus:border-emerald-500 cursor-pointer">
+            <label class="text-slate-500 font-bold uppercase tracking-wider block">Filtrar por Familia *</label>
+            <select v-model="familiaSeleccionada" @change="cargarMiembros" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-700 outline-none focus:border-indigo-500 cursor-pointer">
               <option value="">— Selecciona una familia —</option>
               <option v-for="f in familias" :key="f.id" :value="f.id">{{ f.representante }} ({{ f.cedula }})</option>
             </select>
           </div>
           <div class="flex-1 min-w-[200px]">
             <input v-model="busquedaMiembro" type="text" placeholder="Buscar miembro..."
-              class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-emerald-500 outline-none transition-all shadow-inner"/>
+              class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:border-indigo-500 outline-none transition-all shadow-inner"/>
           </div>
-          <button v-if="authStore.canManageFamilias && familiaSeleccionada" @click="abrirModalMiembro()" class="inline-flex items-center justify-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-emerald-700 shadow-sm transition-all cursor-pointer">
+          <button v-if="authStore.canManageFamilias && familiaSeleccionada" @click="abrirModalMiembro()" class="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-indigo-700 shadow-sm transition-all cursor-pointer">
             <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             Agregar miembro
           </button>
         </div>
 
         <!-- Info de la familia seleccionada -->
-        <div v-if="familiaSeleccionada" class="bg-emerald-50 border border-emerald-250 rounded-2xl p-3.5 flex items-center gap-2 text-xs text-emerald-800 shadow-md">
-          <svg class="w-4 h-4 text-emerald-600 flex-shrink-0 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          <span class="text-emerald-700 font-bold uppercase">{{ familiaActual?.representante }}</span>
+        <div v-if="familiaSeleccionada" class="bg-indigo-50 border border-indigo-200 rounded-2xl p-3.5 flex items-center gap-2 text-xs text-indigo-900 shadow-sm">
+          <span class="text-indigo-700 font-bold uppercase">{{ familiaActual?.representante }}</span>
           <span class="text-slate-500">· {{ miembrosFiltrados.length }} miembro(s) registrado(s)</span>
         </div>
 
-        <div v-if="!familiaSeleccionada" class="bg-white border border-slate-200 rounded-2xl p-16 text-center space-y-4 shadow-md">
-          <svg class="w-12 h-12 text-slate-355 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          <p class="text-slate-400 font-semibold text-xs uppercase tracking-wider">Selecciona una familia para visualizar su estructura de miembros</p>
+        <div v-if="!familiaSeleccionada" class="bg-white border border-slate-200 rounded-2xl p-16 text-center space-y-4 shadow-sm">
+          <p class="text-slate-400 uppercase tracking-widest font-bold text-xs">POR FAVOR SELECCIONE UNA FAMILIA PARA VISUALIZAR A SUS INTEGRANTES</p>
         </div>
 
-        <div v-else class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-md">
-          <div v-if="loadingMiembros" class="flex justify-center py-16">
-            <svg class="animate-spin h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+        <div v-else class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+          <div v-if="loadingMiembros" class="p-1">
+            <SkeletonTable :rows="4" />
           </div>
           <div v-else class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
               <thead>
-                <tr class="bg-emerald-50/80 border-b border-emerald-200 text-[10px] uppercase tracking-wider text-emerald-800 font-bold">
-                  <th class="px-5 py-3.5 font-bold">Nombre</th>
-                  <th class="px-5 py-3.5 font-bold text-center hidden sm:table-cell">Edad</th>
-                  <th class="px-5 py-3.5 font-bold hidden sm:table-cell">Doc.</th>
-                  <th class="px-5 py-3.5 font-bold hidden md:table-cell">Número</th>
-                  <th class="px-5 py-3.5 font-bold">Parentesco</th>
-                  <th class="px-5 py-3.5 font-bold text-center">Emb.</th>
-                  <th class="px-5 py-3.5 font-bold text-center hidden md:table-cell">Discap.</th>
-                  <th class="px-5 py-3.5 font-bold text-center hidden md:table-cell">Enf.Cr.</th>
-                  <th class="px-5 py-3.5 font-bold text-center">Vuln.</th>
-                  <th v-if="authStore.canManageFamilias" class="px-5 py-3.5 font-bold text-right">Acc.</th>
+                <tr class="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-550 font-bold">
+                  <th class="px-5 py-3.5">Nombre Completo</th>
+                  <th class="px-5 py-3.5">Identificación</th>
+                  <th class="px-5 py-3.5 text-center">Edad</th>
+                  <th class="px-5 py-3.5">Parentesco</th>
+                  <th class="px-5 py-3.5">Condiciones Especiales</th>
+                  <th v-if="authStore.canManageFamilias" class="px-5 py-3.5 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody class="text-xs text-slate-700">
-                <tr v-for="m in miembrosPaginados" :key="m.id" class="odd:bg-white even:bg-emerald-50/20 hover:bg-emerald-100/30 transition-colors">
-                  <td class="px-5 py-4 font-semibold text-slate-900 text-sm border-b border-slate-100/40">{{ m.nombre }}</td>
-                  <td class="px-5 py-4 text-center text-slate-500 hidden sm:table-cell border-b border-slate-100/40">{{ m.edad ?? '—' }}</td>
-                  <td class="px-5 py-4 text-slate-500 hidden sm:table-cell border-b border-slate-100/40">{{ m.tipo_documento }}</td>
-                  <td class="px-5 py-4 text-slate-500 hidden md:table-cell text-xs border-b border-slate-100/40">{{ m.numero_documento }}</td>
-                  <td class="px-5 py-4 text-slate-700 border-b border-slate-100/40">{{ m.parentezco }}</td>
-                  <td class="px-5 py-4 text-center border-b border-slate-100/40"><span :class="m.es_embarazada ? 'text-pink-600 font-bold' : 'text-slate-350'">{{ m.es_embarazada ? '✓' : '–' }}</span></td>
-                  <td class="px-5 py-4 text-center hidden md:table-cell border-b border-slate-100/40"><span :class="m.tiene_discapacidad ? 'text-amber-600 font-bold' : 'text-slate-350'">{{ m.tiene_discapacidad ? '✓' : '–' }}</span></td>
-                  <td class="px-5 py-4 text-center hidden md:table-cell border-b border-slate-100/40"><span :class="m.enfermedad_cronica ? 'text-rose-600 font-bold' : 'text-slate-350'">{{ m.enfermedad_cronica ? '✓' : '–' }}</span></td>
-                  <td class="px-5 py-4 text-center border-b border-slate-100/40">
-                    <span :class="['inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold border uppercase tracking-wider', m.vulnerable ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200']">
-                      {{ m.vulnerable ? 'Sí' : 'No' }}
-                    </span>
+                <tr v-for="m in miembrosPaginados" :key="m.id" class="border-b border-slate-150 hover:bg-slate-50 transition-colors">
+                  <td class="px-5 py-4 font-semibold text-slate-900 text-sm">{{ m.nombre }}</td>
+                  <td class="px-5 py-4"><span class="text-xs bg-slate-100 border border-slate-200 px-2.5 py-0.5 rounded text-slate-650 font-semibold">{{ m.tipo_documento }} {{ m.numero_documento }}</span></td>
+                  <td class="px-5 py-4 text-center font-bold">{{ m.edad }} años</td>
+                  <td class="px-5 py-4"><span class="px-2 py-0.5 bg-indigo-50 border border-indigo-200 rounded-full text-[10px] text-indigo-700 font-bold uppercase tracking-wider">{{ m.parentezco }}</span></td>
+                  <td class="px-5 py-4">
+                    <div class="flex flex-wrap gap-1">
+                      <span v-if="m.es_embarazada" class="px-2 py-0.5 bg-pink-50 border border-pink-200 rounded-md text-[9px] text-pink-700 font-bold uppercase">Embarazo</span>
+                      <span v-if="m.tiene_discapacidad" class="px-2 py-0.5 bg-amber-50 border border-amber-200 rounded-md text-[9px] text-amber-700 font-bold uppercase">Discapacidad</span>
+                      <span v-if="m.enfermedad_cronica" class="px-2 py-0.5 bg-rose-50 border border-rose-200 rounded-md text-[9px] text-rose-700 font-bold uppercase">Crónico</span>
+                      <span v-if="m.vulnerable" class="px-2 py-0.5 bg-rose-100 border border-rose-250 rounded-md text-[9px] text-rose-800 font-bold uppercase" :title="m.tipo_vulnerabilidad">Esp: {{ m.tipo_vulnerabilidad || 'Vulnerable' }}</span>
+                      <span v-if="!m.es_embarazada && !m.tiene_discapacidad && !m.enfermedad_cronica && !m.vulnerable" class="text-slate-400 italic">Ninguna</span>
+                    </div>
                   </td>
-                  <td v-if="authStore.canManageFamilias" class="px-5 py-4 text-right border-b border-slate-100/40">
+                  <td v-if="authStore.canManageFamilias" class="px-5 py-4 text-right">
                     <div class="flex items-center justify-end gap-1">
-                      <button @click="abrirModalMiembro(m)" class="p-2 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-slate-50 transition-colors" title="Editar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></button>
-                      <button @click="eliminarMiembro(m)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Eliminar"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
+                      <button @click="abrirModalMiembro(m)" class="p-2 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-slate-50 transition-colors" title="Editar miembro">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                      </button>
+                      <button @click="eliminarMiembro(m)" class="p-2 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-slate-50 transition-colors" title="Eliminar miembro">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                      </button>
                     </div>
                   </td>
                 </tr>
-                <tr v-if="miembrosFiltrados.length === 0 && !loadingMiembros">
-                  <td :colspan="authStore.canManageFamilias ? 10 : 9" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider border-b border-slate-100/40">
-                    ESTA FAMILIA NO TIENE MIEMBROS REGISTRADOS AÚN
-                  </td>
+                <tr v-if="miembrosFiltrados.length === 0">
+                  <td colspan="6" class="px-5 py-12 text-center text-slate-400 font-semibold uppercase tracking-wider">No se encontraron miembros registrados</td>
                 </tr>
               </tbody>
             </table>
@@ -210,61 +206,61 @@
     <!-- Modal Familia -->
     <div v-if="modalVisible" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto">
       <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl my-6 animate-[fadeIn_0.3s_ease-out] overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
-          <h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">{{ editando ? 'Editar Familia' : 'Registrar Familia' }}</h2>
-          <button @click="cerrarModal" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+          <h2 class="font-extrabold text-slate-800 font-sans text-sm uppercase tracking-wider">{{ editando ? 'Editar Familia' : 'Registrar Familia' }}</h2>
+          <button @click="cerrarModal" class="text-slate-400 hover:text-slate-650 transition-colors cursor-pointer">
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         <div class="p-5 space-y-4 text-xs">
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Cédula *</label>
-              <input v-model="form.cedula" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Cédula *</label>
+              <input v-model="form.cedula" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Teléfono</label>
-              <input v-model="form.telefono" type="tel" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Teléfono</label>
+              <input v-model="form.telefono" type="tel" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
           </div>
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Representante (Cabeza de Hogar) *</label>
-            <input v-model="form.representante" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Representante (Cabeza de Hogar) *</label>
+            <input v-model="form.representante" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Dirección Física *</label>
-            <input v-model="form.direccion" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Dirección Física *</label>
+            <input v-model="form.direccion" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Ubicación de Origen / Zona</label>
-            <input v-model="form.ubicacion_actual" type="text" placeholder="Ej: Zona inundada, barrio..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Ubicación de Origen / Zona</label>
+            <input v-model="form.ubicacion_actual" type="text" placeholder="Ej: Zona inundada, barrio..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Cant. Miembros</label>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Cant. Miembros</label>
               <input :value="editando ? form.cantidad_miembros : 0" type="number" disabled class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 text-xs"/>
             </div>
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Prioridad</label>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Prioridad</label>
               <input :value="editando ? form.prioridad : 'Calculada por motor'" type="text" disabled class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-500 text-xs"/>
             </div>
           </div>
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Refugio Temporal Asignado</label>
-            <select v-model.number="form.id_refugio" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs">
+            <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Refugio Temporal Asignado</label>
+            <select v-model.number="form.id_refugio" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs">
               <option :value="0">Sin asignar / Pendiente</option>
               <option v-for="r in refugios" :key="r.id" :value="r.id">{{ r.nombre }}</option>
             </select>
           </div>
           <div class="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200 rounded-xl select-none cursor-pointer">
-            <input id="habeas" v-model="form.aceptacion_habeas_data" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-emerald-600 rounded focus:ring-0 focus:ring-offset-0"/>
-            <label for="habeas" class="text-xs text-slate-600 font-semibold cursor-pointer uppercase tracking-wide">Acepta Políticas Habeas Data *</label>
+            <input id="habeas" v-model="form.aceptacion_habeas_data" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-indigo-650 rounded focus:ring-0 focus:ring-offset-0"/>
+            <label for="habeas" class="text-xs text-slate-600 font-bold cursor-pointer uppercase tracking-wide">Acepta Políticas Habeas Data *</label>
           </div>
-          <div v-if="error" class="p-4 bg-rose-50 border border-rose-200 rounded-2xl text-xs text-rose-700 shadow-md">{{ error }}</div>
+          <div v-if="modalError" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700">{{ modalError }}</div>
         </div>
         <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
           <button @click="cerrarModal" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
-          <button @click="guardar" :disabled="saving" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
+          <button @click="guardar" :disabled="saving" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
             {{ saving ? 'Procesando...' : 'Confirmar' }}
           </button>
         </div>
@@ -274,59 +270,59 @@
     <!-- Modal Miembro -->
     <div v-if="modalMiembroVisible" class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto">
       <div class="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-xl my-6 animate-[fadeIn_0.3s_ease-out] overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+        <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <div>
-            <h2 class="font-bold text-slate-800 font-display text-sm uppercase tracking-wider">{{ editandoMiembro ? 'Editar Miembro' : 'Agregar Miembro' }}</h2>
+            <h2 class="font-extrabold text-slate-800 font-sans text-sm uppercase tracking-wider">{{ editandoMiembro ? 'Editar Miembro' : 'Agregar Miembro' }}</h2>
             <p class="text-[10px] text-slate-500 mt-0.5 uppercase tracking-wide">Representante: {{ familiaParaMiembro?.representante }}</p>
           </div>
           <button @click="cerrarModalMiembro" class="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
         <div class="p-5 space-y-4 text-xs">
           <div>
-            <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Nombre Completo *</label>
-            <input v-model="formMiembro.nombre" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+            <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Nombre Completo *</label>
+            <input v-model="formMiembro.nombre" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
           </div>
           <div class="grid grid-cols-3 gap-4">
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Tipo Doc.</label>
-              <select v-model="formMiembro.tipo_documento" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs">
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Tipo Doc.</label>
+              <select v-model="formMiembro.tipo_documento" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs">
                 <option>CC</option><option>TI</option><option>CE</option><option>RC</option>
               </select>
             </div>
             <div class="col-span-2">
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Número Documento *</label>
-              <input v-model="formMiembro.numero_documento" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Número Documento *</label>
+              <input v-model="formMiembro.numero_documento" type="text" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Edad</label>
-              <input v-model.number="formMiembro.edad" type="number" min="0" max="120" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs shadow-inner"/>
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Edad</label>
+              <input v-model.number="formMiembro.edad" type="number" min="0" max="120" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs shadow-inner"/>
             </div>
             <div>
-              <label class="block text-slate-500 font-semibold uppercase tracking-wider mb-1.5">Parentesco</label>
-              <select v-model="formMiembro.parentezco" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs">
+              <label class="block text-slate-500 font-bold uppercase tracking-wider mb-1.5">Parentesco</label>
+              <select v-model="formMiembro.parentezco" class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs">
                 <option>Cabeza de hogar</option><option>Cónyuge</option><option>Hijo</option><option>Padre/Madre</option><option>Abuelo/a</option><option>Otro</option>
               </select>
             </div>
           </div>
           <div class="space-y-2.5 p-3.5 bg-slate-50 border border-slate-200 rounded-xl">
-            <p class="text-slate-600 uppercase tracking-wider font-bold mb-3 border-b border-slate-200/60 pb-1.5">Condiciones de vulnerabilidad</p>
-            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.es_embarazada" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-pink-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-semibold uppercase tracking-wide">Está embarazada</span></label>
-            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.tiene_discapacidad" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-amber-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-semibold uppercase tracking-wide">Tiene discapacidad</span></label>
-            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.enfermedad_cronica" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-rose-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-semibold uppercase tracking-wide">Enfermedad crónica</span></label>
-            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.vulnerable" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-rose-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-semibold uppercase tracking-wide">Vulnerabilidad Crítica</span></label>
+            <p class="text-slate-650 uppercase tracking-wider font-extrabold mb-3 border-b border-slate-200 pb-1.5 text-[10px]">Condiciones de vulnerabilidad</p>
+            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.es_embarazada" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-pink-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-bold uppercase tracking-wide">Está embarazada</span></label>
+            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.tiene_discapacidad" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-amber-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-bold uppercase tracking-wide">Tiene discapacidad</span></label>
+            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.enfermedad_cronica" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-rose-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-bold uppercase tracking-wide">Enfermedad crónica</span></label>
+            <label class="flex items-center gap-3 cursor-pointer select-none"><input v-model="formMiembro.vulnerable" type="checkbox" class="w-4 h-4 bg-white border-slate-350 text-indigo-600 rounded focus:ring-0"/><span class="text-slate-600 text-xs font-bold uppercase tracking-wide">Vulnerabilidad Crítica</span></label>
             <div v-if="formMiembro.vulnerable" class="pt-2 animate-[fadeIn_0.2s_ease-out]">
-              <input v-model="formMiembro.tipo_vulnerabilidad" type="text" placeholder="Especificar condición especial..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-xs font-sans shadow-inner"/>
+              <input v-model="formMiembro.tipo_vulnerabilidad" type="text" placeholder="Especificar condición especial..." class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-800 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs font-sans shadow-inner"/>
             </div>
           </div>
           <div v-if="modalMiembroError" class="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700">{{ modalMiembroError }}</div>
         </div>
         <div class="p-5 border-t border-slate-100 bg-slate-50 flex gap-3 text-xs uppercase tracking-wider">
           <button @click="cerrarModalMiembro" class="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors cursor-pointer bg-white">Cancelar</button>
-          <button @click="guardarMiembro" :disabled="savingM" class="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
+          <button @click="guardarMiembro" :disabled="savingM" class="flex-1 py-2.5 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer">
             {{ savingM ? 'Procesando...' : 'Confirmar' }}
           </button>
         </div>
@@ -339,6 +335,7 @@
 import { ref, computed, onMounted } from 'vue'
 import AppLayout from '@/components/AppLayout.vue'
 import PaginationBar from '@/components/PaginationBar.vue'
+import SkeletonTable from '@/components/SkeletonTable.vue'
 import { useAuthStore } from '@/stores/auth'
 import {
   apiGetFamilias, apiCreateFamilia, apiUpdateFamilia, apiDeleteFamilia,
@@ -390,7 +387,7 @@ const formMiembro = ref({
 // ── Computed ──────────────────────────────────────────────────────────────────
 const totalPersonas = computed(() => familias.value.reduce((a, f) => a + f.cantidad_miembros, 0))
 const puntajePromedio = computed(() => { const validos = familias.value.filter(f => !isNaN(Number(f.prioridad))); return validos.length ? Math.round(validos.reduce((a, f) => a + Number(f.prioridad), 0) / validos.length) : 0 })
-const familiasAltaPrioridad = computed(() => familias.value.filter(f => Number(f.prioridad) >= 85).length)
+const familiasAltaPrioridad = computed(() => familias.value.filter(f => Number(f.prioridad) >= 80).length)
 const familiaActual = computed(() => familias.value.find(f => f.id === familiaSeleccionada.value) ?? null)
 
 const familiasFiltradas = computed(() => {
@@ -496,7 +493,6 @@ async function eliminarFamilia(f: Familia) {
 function abrirModalMiembro(m?: MiembroFamilia, familiaDesdeFila?: Familia) {
   editandoMiembro.value = m ?? null
 
-  // Determinar a qué familia pertenece
   const familiaId = m?.familia_id ?? familiaDesdeFila?.id ?? (familiaSeleccionada.value as number) ?? 0
   familiaParaMiembro.value = familias.value.find(f => f.id === familiaId) ?? null
 
@@ -536,21 +532,17 @@ async function guardarMiembro() {
         const idx = miembros.value.findIndex(x => x.id === editandoMiembro.value!.id)
         if (idx !== -1) miembros.value[idx] = { ...miembros.value[idx], ...formMiembro.value }
         
-        // Recargar familias para actualizar prioridades (puesto que cambiaron datos de vulnerabilidad)
         const resFam = await apiGetFamilias()
         if (resFam.success && resFam.data) familias.value = resFam.data
       } else { modalMiembroError.value = res.message ?? 'Error al actualizar' }
     } else {
       const res = await apiCreateMiembro(formMiembro.value as any)
       if (res.success) {
-        // Recargar miembros de esta familia
         await cargarMiembros()
         
-        // Recargar familias para actualizar conteo y prioridades
         const resFam = await apiGetFamilias()
         if (resFam.success && resFam.data) familias.value = resFam.data
 
-        // Si se agregó desde la fila de familia, cambiar al tab de miembros
         if (tab.value === 'familias') {
           familiaSeleccionada.value = formMiembro.value.familia_id
           tab.value = 'miembros'
@@ -572,7 +564,6 @@ async function eliminarMiembro(m: MiembroFamilia) {
   if (res.success) {
     miembros.value = miembros.value.filter(x => x.id !== m.id)
     
-    // Recargar familias para actualizar conteo y prioridades
     const resFam = await apiGetFamilias()
     if (resFam.success && resFam.data) familias.value = resFam.data
   } else error.value = res.message ?? 'Error al eliminar'

@@ -1,159 +1,144 @@
 <template>
-  <div class="min-h-screen bg-slate-50 text-slate-900 relative">
-    <TheNavbar />
-    
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-emerald-800 to-emerald-950 text-white py-16 sm:py-24">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-12 gap-12 items-center">
+  <div class="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between">
+    <div>
+      <TheNavbar />
+      
+      <!-- Main Terminal Console -->
+      <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        <div class="grid lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Left: Console Identification & Restricted Access Notice -->
           <div class="lg:col-span-7 space-y-6">
-            <span class="inline-flex items-center gap-1.5 px-3.5 py-1 bg-white/10 rounded-full text-xs font-semibold uppercase tracking-wider text-emerald-200">
-              Gestión Integral de Albergues y Recursos
-            </span>
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight font-display">
-              Coordinación eficiente ante emergencias humanitarias
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 border border-indigo-200 rounded-full text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+              <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
+              Terminal Operativo · Alcaldía de Montería
+            </div>
+            
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight font-display uppercase">
+              Sistema de Gestión &amp; Alivio Humanitario
             </h1>
-            <p class="text-sm sm:text-base text-emerald-100 max-w-xl leading-relaxed">
-              Plataforma institucional para el censo de familias damnificadas, control de refugios temporales y la distribución organizada y transparente de ayuda humanitaria en Montería.
+            
+            <p class="text-xs sm:text-sm text-slate-600 max-w-xl leading-relaxed">
+              Consola centralizada para la coordinación de recursos, censo de familias afectadas y control de ocupación en refugios temporales bajo la Oficina de Gestión del Riesgo de Desastres.
             </p>
-            <div class="flex flex-col sm:flex-row gap-3 pt-2 font-display text-xs uppercase font-bold tracking-wider">
-              <router-link 
-                to="/login" 
-                class="inline-flex items-center justify-center gap-2 bg-white text-emerald-800 px-6 py-3 rounded-lg font-bold hover:bg-emerald-50 transition-all w-full sm:w-auto shadow-sm"
-              >
-                Acceder a Sistema
-              </router-link>
+
+            <!-- Security Alert / Warning Box -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 max-w-xl text-xs text-amber-900">
+              <div class="flex gap-2">
+                <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div>
+                  <strong class="font-bold uppercase tracking-wider block mb-1">Aviso de Seguridad Operacional</strong>
+                  El acceso a esta plataforma es de carácter confidencial y restringido para personal oficial y de socorro certificado. Todas las acciones son auditadas en tiempo real.
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Actions Gate -->
+            <div class="pt-2 flex flex-col sm:flex-row gap-3">
+              <template v-if="!authStore.isAuthenticated">
+                <router-link 
+                  to="/login" 
+                  class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold font-display text-xs uppercase tracking-wider transition-all shadow-sm w-full sm:w-auto cursor-pointer"
+                >
+                  Ingresar con Credenciales
+                  <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h16.5a1.5 1.5 0 001.5-1.5V12a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 12v8.25a1.5 1.5 0 001.5 1.5z"/>
+                  </svg>
+                </router-link>
+              </template>
+              <template v-else>
+                <router-link 
+                  to="/dashboard" 
+                  class="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold font-display text-xs uppercase tracking-wider transition-all shadow-sm w-full sm:w-auto cursor-pointer"
+                >
+                  Acceder a la Consola de Control
+                  <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25a2.25 2.25 0 01-2.25 2.25H18a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/>
+                  </svg>
+                </router-link>
+              </template>
               <router-link 
                 to="/about" 
-                class="inline-flex items-center justify-center gap-2 bg-emerald-700/50 border border-emerald-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-emerald-700/80 transition-all w-full sm:w-auto"
+                class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-650 px-6 py-3 rounded-xl font-bold font-display text-xs uppercase tracking-wider hover:bg-slate-50 transition-all w-full sm:w-auto"
               >
-                Conocer Más
+                Manual &amp; Protocolo Operativo
               </router-link>
             </div>
           </div>
           
-          <!-- Stats card visual -->
+          <!-- Right: Real-time local status monitor -->
           <div class="lg:col-span-5">
-            <div class="bg-white rounded-xl border border-slate-200 p-6 sm:p-8 space-y-5 text-slate-800 shadow-md">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Indicadores Operativos</span>
-                <span class="inline-flex items-center px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase border border-emerald-100">Activo</span>
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-6 text-slate-800 shadow-sm animate-[fadeIn_0.3s_ease-out]">
+              <div class="flex items-center justify-between border-b border-slate-150 pb-3">
+                <div class="flex items-center gap-2">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-450 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
+                  </span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-700">Estado de la Emergencia</span>
+                </div>
+                <span class="text-[10px] font-mono font-bold text-slate-400">MONTERÍA</span>
               </div>
+              
               <div class="grid grid-cols-2 gap-4">
-                <div class="bg-slate-50 border border-slate-100 p-4 rounded-lg text-center">
-                  <div class="text-2xl font-extrabold text-slate-900 font-display">4+</div>
-                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Refugios Habilitados</div>
+                <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl">
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Refugios Activos</div>
+                  <div class="text-2xl font-extrabold text-slate-900 mt-1 font-display">4</div>
+                  <div class="text-[9px] text-slate-500 mt-1">Capacidades asignadas</div>
                 </div>
-                <div class="bg-slate-50 border border-slate-100 p-4 rounded-lg text-center">
-                  <div class="text-2xl font-extrabold text-slate-900 font-display">300+</div>
-                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Familias Censadas</div>
+                
+                <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl">
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Familias Registradas</div>
+                  <div class="text-2xl font-extrabold text-slate-900 mt-1 font-display">312</div>
+                  <div class="text-[9px] text-slate-500 mt-1">Censo municipal</div>
                 </div>
-                <div class="bg-slate-50 border border-slate-100 p-4 rounded-lg text-center">
-                  <div class="text-2xl font-extrabold text-slate-900 font-display">1.2K+</div>
-                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Ayudas Entregadas</div>
+                
+                <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl">
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Entregas de Insumos</div>
+                  <div class="text-2xl font-extrabold text-slate-900 mt-1 font-display">1,248</div>
+                  <div class="text-[9px] text-slate-500 mt-1">Últimas 72 horas</div>
                 </div>
-                <div class="bg-slate-50 border border-slate-100 p-4 rounded-lg text-center">
-                  <div class="text-2xl font-extrabold text-slate-900 font-display">100%</div>
-                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-1">Monitoreo Real</div>
+                
+                <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl">
+                  <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-sans">Capacidad Ocupada</div>
+                  <div class="text-2xl font-extrabold text-rose-600 mt-1 font-display">78%</div>
+                  <div class="text-[9px] text-slate-500 mt-1">Nivel crítico consolidado</div>
+                </div>
+              </div>
+
+              <!-- Operational contact directory in case of severe escalation -->
+              <div class="border-t border-slate-150 pt-4 space-y-2 text-[11px] text-slate-650">
+                <span class="font-bold text-[10px] uppercase tracking-wider text-slate-500 block mb-1">Contactos del Puesto de Mando (PMU)</span>
+                <div class="flex justify-between">
+                  <span>Coordinación Operativa:</span>
+                  <span class="font-semibold text-slate-800">312-XXX-XXXX</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Oficina de Riesgo Municipal:</span>
+                  <span class="font-semibold text-slate-800">315-XXX-XXXX</span>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
-      </div>
-    </section>
-
-    <!-- Features Preview -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
-      <div class="max-w-7xl mx-auto">
-        <div class="text-center mb-16 space-y-2">
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight font-display">MÓDULOS DEL SISTEMA DE EMERGENCIA</h2>
-          <p class="text-slate-500 max-w-2xl mx-auto text-xs font-semibold uppercase tracking-wider">
-            Herramientas administrativas para el personal de socorro y control
-          </p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-          <div class="bg-white rounded-xl p-6 border border-slate-200 hover:border-emerald-300 transition-colors shadow-sm">
-            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mb-5">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-              </svg>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2 font-display">Administración de Refugios</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Registro y control de albergues municipales habilitados, monitoreo de su capacidad máxima y ocupación real de damnificados.</p>
-          </div>
-
-          <div class="bg-white rounded-xl p-6 border border-slate-200 hover:border-emerald-300 transition-colors shadow-sm">
-            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mb-5">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2 font-display">Censo y Focalización</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Registro pormenorizado de las familias damnificadas y cálculo de prioridad bajo reglas de vulnerabilidad del motor de priorización.</p>
-          </div>
-
-          <div class="bg-white rounded-xl p-6 border border-slate-200 hover:border-emerald-300 transition-colors shadow-sm sm:col-span-2 md:col-span-1">
-            <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center mb-5">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-              </svg>
-            </div>
-            <h3 class="text-base font-bold text-slate-900 mb-2 font-display">Inventario de Ayudas</h3>
-            <p class="text-slate-600 text-xs leading-relaxed">Gestión de insumos de ayuda humanitaria (alimentos, agua, kits de higiene) y control de stock mínimo en el almacén de asistencia.</p>
-          </div>
-        </div>
-
-        <div class="text-center mt-10">
-          <router-link 
-            to="/about" 
-            class="inline-flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 font-bold text-xs uppercase tracking-wider transition-colors font-display"
-          >
-            Ver Detalle Operativo
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </router-link>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 border-t border-slate-200 bg-white">
-      <div class="max-w-4xl mx-auto text-center space-y-4">
-        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight font-display">
-          Acceso Autorizado para Personal del Municipio
-        </h2>
-        <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider max-w-xl mx-auto">
-          Inicie sesión para acceder a las herramientas de control y reportes de ayuda humanitaria de Montería.
-        </p>
-        <div class="pt-2">
-          <router-link 
-            to="/login" 
-            class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3.5 rounded-lg font-bold font-display text-xs uppercase tracking-wider transition-all shadow-sm"
-          >
-            Ingresar al Panel de Gestión
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-          </router-link>
-        </div>
-      </div>
-    </section>
+      </main>
+    </div>
 
     <!-- Footer -->
-    <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-slate-200 bg-slate-50 text-slate-500 font-display text-xs">
+    <footer class="py-6 px-4 border-t border-slate-200 bg-white text-slate-500 font-display text-xs">
       <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-indigo-600 rounded flex items-center justify-center">
+            <svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
             </svg>
           </div>
-          <span class="font-extrabold tracking-wider text-slate-800">REFUGIOS MONTERÍA</span>
+          <span class="font-bold tracking-wider text-slate-800">REFUGIOS MONTERÍA</span>
         </div>
-        <p class="text-[10px] font-medium uppercase tracking-wide text-center sm:text-right text-slate-500">Alcaldía de Montería - Córdoba · Oficina de Gestión del Riesgo</p>
+        <p class="text-[10px] font-medium uppercase tracking-wide text-slate-500">Alcaldía de Montería · Oficina de Gestión del Riesgo</p>
       </div>
     </footer>
   </div>
@@ -161,4 +146,7 @@
 
 <script setup lang="ts">
 import TheNavbar from '@/components/TheNavbar.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 </script>

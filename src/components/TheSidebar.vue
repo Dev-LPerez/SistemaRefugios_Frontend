@@ -2,119 +2,127 @@
   <!-- Overlay mobile -->
   <div
     v-if="open && isMobile"
-    class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-30 lg:hidden"
+    class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-35 lg:hidden"
     @click="open = false"
   />
 
   <!-- Sidebar -->
   <aside
     :class="[
-      'fixed top-0 left-0 h-screen z-40 flex flex-col bg-emerald-950 border-r border-emerald-900/60 text-white transition-all duration-300 shadow-xl',
+      'fixed top-0 left-0 h-screen z-40 flex flex-col bg-white border-r border-slate-200 text-slate-900 transition-all duration-300 ease-out shadow-sm',
       open ? 'w-64' : 'w-16',
       !open && isMobile ? '-translate-x-full' : 'translate-x-0'
     ]"
   >
     <!-- Header/Logo -->
-    <div class="flex items-center justify-between px-4 h-16 border-b border-emerald-900/60 flex-shrink-0">
+    <div class="flex items-center justify-between px-4 h-16 border-b border-slate-200 flex-shrink-0">
       <div v-if="open" class="flex items-center gap-2.5 min-w-0">
-        <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+          <svg class="w-4 h-4 text-white stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
           </svg>
         </div>
         <div class="flex flex-col min-w-0">
-          <span class="font-bold text-xs uppercase tracking-widest text-emerald-350 font-display">REFUGIOS</span>
-          <span class="text-[9px] text-emerald-200/60 font-mono tracking-tight -mt-0.5">SISTEMA DE GESTIÓN</span>
+          <span class="font-extrabold text-xs uppercase tracking-wider text-indigo-700 font-sans">REFUGIOS</span>
+          <span class="text-[9px] text-slate-500 font-semibold tracking-tight -mt-0.5">SISTEMA DE GESTIÓN</span>
         </div>
       </div>
-      <div v-else class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center mx-auto shadow-sm">
-        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      <div v-else class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center mx-auto shadow-sm">
+        <svg class="w-4 h-4 text-white stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
         </svg>
       </div>
       <button
         v-if="open"
         @click="open = false"
-        class="p-1 rounded hover:bg-emerald-900/50 text-emerald-200 hover:text-white transition-colors flex-shrink-0 cursor-pointer"
+        class="p-1 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors flex-shrink-0 cursor-pointer"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"/>
+        <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
         </svg>
       </button>
     </div>
 
     <!-- User info panel -->
-    <div :class="['px-4 py-3 border-b border-emerald-900/60 bg-emerald-950 flex-shrink-0', open ? '' : 'flex justify-center']">
+    <div :class="['px-4 py-3 border-b border-slate-200 bg-slate-50/50 flex-shrink-0', open ? '' : 'flex justify-center']">
       <div v-if="open" class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-full bg-emerald-800 text-white font-display font-bold flex items-center justify-center flex-shrink-0 text-sm shadow-sm">
+        <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-sans font-bold flex items-center justify-center flex-shrink-0 text-xs shadow-sm">
           {{ authStore.user?.user?.charAt(0)?.toUpperCase() ?? 'U' }}
         </div>
         <div class="min-w-0">
-          <p class="text-xs font-semibold text-emerald-100 truncate">{{ authStore.user?.user ?? 'Usuario' }}</p>
-          <div class="flex items-center gap-1.5 mt-0.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            <p class="text-[9px] font-mono uppercase text-emerald-300 truncate tracking-wider">{{ authStore.user?.rol ?? '' }}</p>
+          <p class="text-[11px] font-bold text-slate-800 truncate leading-none">{{ authStore.user?.user ?? 'Usuario' }}</p>
+          <div class="flex items-center gap-1.5 mt-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <p class="text-[9px] font-mono uppercase text-slate-500 truncate tracking-wider leading-none">{{ authStore.user?.rol ?? '' }}</p>
           </div>
         </div>
       </div>
-      <div v-else class="w-8 h-8 rounded-full bg-emerald-800 text-white font-display font-bold flex items-center justify-center text-sm shadow-sm">
+      <div v-else class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 font-sans font-bold flex items-center justify-center text-xs shadow-sm" :title="authStore.user?.user">
         {{ authStore.user?.user?.charAt(0)?.toUpperCase() ?? 'U' }}
       </div>
     </div>
 
     <!-- Nav items -->
-    <nav class="flex-1 overflow-y-auto py-3 space-y-1.5 px-2">
+    <nav class="flex-1 overflow-y-auto py-4 space-y-4 px-3">
       <!-- Toggle button when collapsed -->
       <button
         v-if="!open"
         @click="open = true"
-        class="w-full flex justify-center p-2 rounded-lg hover:bg-emerald-900/50 text-emerald-250 hover:text-white transition-colors mb-3 cursor-pointer"
+        class="w-full flex justify-center p-2 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors mb-3 cursor-pointer"
         title="Expandir menú"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/>
+        <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"/>
         </svg>
       </button>
 
-      <template v-for="item in visibleItems" :key="item.to">
-        <router-link
-          :to="item.to"
-          :class="[
-            'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative border-l-4 font-semibold text-xs uppercase tracking-wider',
-            isActive(item.to)
-              ? 'bg-emerald-900/40 text-emerald-400 border-emerald-500 shadow-inner'
-              : 'text-emerald-200/70 border-transparent hover:bg-emerald-900/30 hover:text-emerald-100'
-          ]"
-          :title="!open ? item.label : undefined"
-        >
-          <span :class="['flex-shrink-0', isActive(item.to) ? 'text-emerald-400' : 'text-emerald-200/50 group-hover:text-emerald-100']" v-html="item.icon" />
-          <span v-if="open" class="font-display">{{ item.label }}</span>
-          <!-- Tooltip when collapsed -->
-          <span
-            v-if="!open"
-            class="absolute left-full ml-2 px-2.5 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50"
-          >
-            {{ item.label }}
-          </span>
-        </router-link>
-      </template>
+      <!-- Grouped Menus -->
+      <div v-for="g in groups" :key="g.name" class="space-y-1.5">
+        <p v-if="open" class="px-3 text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+          {{ g.name }}
+        </p>
+        <div class="space-y-0.5">
+          <template v-for="item in g.items" :key="item.to">
+            <router-link
+              :to="item.to"
+              :class="[
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group relative font-medium text-xs border-l-2',
+                isActive(item.to)
+                  ? 'bg-indigo-50/70 text-indigo-600 border-indigo-600 font-semibold'
+                  : 'text-slate-650 border-transparent hover:bg-slate-50 hover:text-slate-900'
+              ]"
+              :title="!open ? item.label : undefined"
+            >
+              <span :class="['flex-shrink-0', isActive(item.to) ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-700']" v-html="item.icon" />
+              <span v-if="open" class="font-sans tracking-tight">{{ item.label }}</span>
+              <!-- Tooltip when collapsed -->
+              <span
+                v-if="!open"
+                class="absolute left-full ml-3 px-2 py-1.5 bg-slate-950 text-white text-[10px] font-medium rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50"
+              >
+                {{ item.label }}
+              </span>
+            </router-link>
+          </template>
+        </div>
+      </div>
     </nav>
 
     <!-- Footer: logout -->
-    <div class="px-2 py-3 border-t border-emerald-900/60 flex-shrink-0">
+    <div class="px-3 py-3 border-t border-slate-200 bg-slate-50/50 flex-shrink-0">
       <button
         @click="handleLogout"
         :class="[
-          'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-emerald-300 hover:bg-rose-900/20 hover:text-rose-250 transition-all group relative font-semibold text-xs uppercase tracking-wider cursor-pointer',
+          'w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 hover:bg-rose-50 hover:text-rose-600 transition-all group relative font-medium text-xs cursor-pointer',
           !open ? 'justify-center' : ''
         ]"
         :title="!open ? 'Cerrar sesión' : undefined"
       >
-        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        <svg class="w-4 h-4 flex-shrink-0 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
         </svg>
-        <span v-if="open" class="font-display">Salir</span>
-        <span v-if="!open" class="absolute left-full ml-2 px-2.5 py-1.5 bg-slate-900 text-rose-350 text-xs font-semibold rounded shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+        <span v-if="open" class="font-sans tracking-tight">Salir del Sistema</span>
+        <span v-if="!open" class="absolute left-full ml-3 px-2 py-1.5 bg-slate-950 text-rose-350 text-[10px] font-medium rounded shadow-md opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
           Cerrar sesión
         </span>
       </button>
@@ -164,57 +172,66 @@ const navItems = [
   {
     to: '/dashboard',
     label: 'Dashboard',
+    group: 'Operaciones',
     roles: null,
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>`
-  },
-  {
-    to: '/refugios',
-    label: 'Refugios',
-    roles: ['Admin', 'Logistica', 'Operario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25a2.25 2.25 0 01-2.25 2.25H18a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z"/></svg>`
   },
   {
     to: '/familias',
     label: 'Familias',
+    group: 'Operaciones',
     roles: ['Admin', 'Operario', 'Voluntario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.109A11.386 11.386 0 018.625 21c-2.24 0-4.32-.647-6.074-1.763v-.109a4.125 4.125 0 017.533-2.493 9.362 9.362 0 016.54 2.493zm-6-8.25a3 3 0 110-6 3 3 0 010 6zm8.5 2.25a2.25 2.25 0 110-4.5 2.25 2.25 0 010 4.5z"/></svg>`
+  },
+  {
+    to: '/refugios',
+    label: 'Refugios',
+    group: 'Operaciones',
+    roles: ['Admin', 'Logistica', 'Operario'],
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M2.25 21h19.5M8.25 21H6.75V10.5a.75.75 0 01.75-.75h7.5a.75.75 0 01.75.75V21M18 7.5h.008v.008H18V7.5z"/></svg>`
   },
   {
     to: '/recursos',
     label: 'Recursos',
+    group: 'Logística',
     roles: ['Admin', 'Logistica'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>`
   },
   {
     to: '/donaciones',
     label: 'Donaciones',
+    group: 'Logística',
     roles: ['Admin', 'Logistica', 'Operario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/></svg>`
   },
   {
     to: '/entregas',
     label: 'Entregas',
+    group: 'Logística',
     roles: ['Admin', 'Logistica', 'Operario', 'Voluntario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.03 0 1.9.732 2.076 1.708M3.75 6.108c0-1.135.845-2.098 1.976-2.192a48.424 48.424 0 011.123-.08M10.25 4.5h-4.5A2.25 2.25 0 003.5 6.75v12a2.25 2.25 0 005.75 2.1h4.5M10.5 4.5h-4.5M10.5 21h4.5"/></svg>`
   },
   {
     to: '/priorizacion',
     label: 'Priorización',
+    group: 'Sistema',
     roles: ['Admin', 'Logistica', 'Operario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>`
   },
   {
     to: '/reportes',
     label: 'Reportes',
+    group: 'Sistema',
     roles: ['Admin', 'Auditor', 'Logistica', 'Operario'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`
   },
   {
     to: '/auditoria',
     label: 'Auditoría',
+    group: 'Sistema',
     roles: ['Admin', 'Auditor'],
-    icon: `<svg class="${iconSize}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 009 11V7a2 2 0 00-2-2H5a2 2 0 00-2 2v4c0 2.717.78 5.225 2.138 7.34M12.012 11c0 3.517 1.009 6.799 2.753 9.571m3.44-2.04l-.054-.09A13.916 13.916 0 0115 11V7a2 2 0 012-2h2a2 2 0 012 2v4c0 2.717-.78 5.225-2.138 7.34M12 9a1 1 0 100-2 1 1 0 000 2z"/></svg>`
-  },
+    icon: `<svg class="${iconSize} stroke-[1.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751A11.959 11.959 0 0112 2.714z"/></svg>`
+  }
 ]
 
 const visibleItems = computed(() =>
@@ -224,4 +241,14 @@ const visibleItems = computed(() =>
     return item.roles.includes(rol)
   })
 )
+
+const groups = computed(() => {
+  const items = visibleItems.value
+  const grps = [
+    { name: 'Operaciones', items: items.filter(i => i.group === 'Operaciones') },
+    { name: 'Logística', items: items.filter(i => i.group === 'Logística') },
+    { name: 'Sistema', items: items.filter(i => i.group === 'Sistema') }
+  ]
+  return grps.filter(g => g.items.length > 0)
+})
 </script>
