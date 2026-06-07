@@ -88,9 +88,9 @@
     </div>
 
     <!-- Contenedor Oficial de Impresión PDF -->
-    <div class="hidden print:block font-sans text-slate-900 p-2 space-y-6">
+    <div class="hidden print:block print-report font-sans text-slate-900 p-2 space-y-6">
       <!-- Cabecera Oficial -->
-      <div class="flex items-center justify-between border-b-2 border-slate-900 pb-4">
+      <div class="flex items-center justify-between print-header">
         <div>
           <h1 class="text-base font-black uppercase tracking-wider text-slate-900">Alivio Humanitario Montería</h1>
           <p class="text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-0.5">Reporte Oficial de Trazabilidad y Distribución</p>
@@ -199,5 +199,77 @@ onMounted(recargar)
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media print {
+  /* Habilitar colores de fondo de impresión */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: letter portrait;
+    margin: 15mm 15mm 20mm 15mm;
+  }
+
+  /* Ocultar el resto del sitio web por completo */
+  body * {
+    visibility: hidden;
+    background: transparent !important;
+  }
+
+  /* Mostrar solo el reporte */
+  .print-report,
+  .print-report * {
+    visibility: visible;
+  }
+
+  /* Posicionar el reporte para que ocupe toda la página */
+  .print-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block !important;
+    background: white !important;
+    color: #0f172a !important; /* Slate 900 */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  }
+
+  /* Estilos del reporte impreso */
+  .print-header {
+    border-bottom: 2px solid #334155 !important; /* Slate 700 */
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+  }
+
+  .print-report table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .print-report th {
+    background-color: #f1f5f9 !important; /* Slate 100 */
+    border-bottom: 2px solid #475569 !important; /* Slate 600 */
+    color: #1e293b !important; /* Slate 800 */
+    font-weight: 700 !important;
+    padding: 6px 8px !important;
+    text-transform: uppercase;
+    font-size: 8px !important;
+  }
+
+  .print-report td {
+    border-bottom: 1px solid #e2e8f0 !important; /* Slate 200 */
+    padding: 6px 8px !important;
+    font-size: 8px !important;
+    color: #334155 !important; /* Slate 700 */
+  }
+
+  .print-report tr {
+    page-break-inside: avoid;
+  }
 }
 </style>
