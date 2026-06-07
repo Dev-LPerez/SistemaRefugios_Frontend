@@ -4,7 +4,6 @@ import { apiLogin, apiLogout, type Usuario } from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<Usuario | null>(null)
-  const token = ref<string | null>(null) // Solo en memoria
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -37,8 +36,8 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const response = await apiLogin(userInput, password)
       if (response.success && response.data) {
+        // Guardamos los datos del usuario para renderizar la interfaz y validar roles
         user.value = response.data.usuario
-        token.value = response.data.token
         localStorage.setItem('user', JSON.stringify(response.data.usuario))
         return true
       } else {
@@ -55,22 +54,27 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function logout() {
     try {
+      // Llama al endpoint de logout para que el backend destruya la cookie HttpOnly
       await apiLogout()
     } catch (e) {
       console.error('Error al cerrar sesión en el servidor:', e)
+    } finally {
+      // Limpiamos el estado en el frontend pase lo que pase con la petición
+      user.value = null
+      localStorage.removeItem('user')
     }
-    user.value = null
-    token.value = null
-    localStorage.removeItem('user')
   }
 
   function initAuth() {
+    // Recupera la sesión visual si el usuario refresca la página
     const saved = localStorage.getItem('user')
-    if (saved) user.value = JSON.parse(saved)
+    if (saved) {
+      user.value = JSON.parse(saved)
+    }
   }
 
   return {
-    user, token, loading, error,
+    user, loading, error,
     isAuthenticated, userRol,
     canManageFamilias, canManageRecursos, canManageEntregas,
     canViewAuditoria, canViewReportes, canManageRefugios,
